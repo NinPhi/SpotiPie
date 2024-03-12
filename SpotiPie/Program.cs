@@ -1,8 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using SpotiPie.Data;
+using SpotiPie.Services;
 
 var builder = WebApplication.CreateBuilder(args);
-
+builder.Services.AddTransient<ITextsService, TextService>();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -25,3 +26,4 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
