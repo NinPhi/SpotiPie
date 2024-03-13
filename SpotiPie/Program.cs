@@ -13,6 +13,8 @@ builder.Services.AddDbContext<AppDbContext>(opts =>
     opts.UseSqlServer(builder.Configuration.GetConnectionString(nameof(AppDbContext))));
 
 builder.Services.AddScoped<IAlbumService, AlbumService>();
+builder.Services.AddScoped<TrackService>();
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())

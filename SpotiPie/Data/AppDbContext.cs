@@ -8,6 +8,11 @@ public class AppDbContext : DbContext
 {
     public DbSet<Artist> Artists => Set<Artist>();
     public DbSet<Album> Albums => Set<Album>();
+    public DbSet<Track> Tracks => Set<Track>();
 
     public AppDbContext(DbContextOptions<AppDbContext> opts) : base(opts) { }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+    }
 }
