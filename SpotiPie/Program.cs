@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using SpotiPie.Data;
+using SpotiPie.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +10,8 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<AppDbContext>(opts =>
     opts.UseSqlServer(builder.Configuration.GetConnectionString(nameof(AppDbContext))));
+
+builder.Services.AddScoped<TrackService>();
 
 var app = builder.Build();
 
