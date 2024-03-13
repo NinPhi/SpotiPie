@@ -2,11 +2,11 @@
 
 public class TrackDto
 {
-    public long Id { get; init; }
+    public int Id { get; init; }
 
-    public string Name { get; init; }
+    public string? Name { get; init; }
 
-    public string Duration { get; init; }
+    public string? Duration { get; init; }
 
-    public string ReleaseDate { get; init; }
+    public DateTime ReleaseDate { get; init; }
 }

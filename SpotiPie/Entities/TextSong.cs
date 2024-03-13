@@ -1,16 +1,12 @@
-﻿namespace SpotiPie.Entities
+﻿namespace SpotiPie.Entities;
+
+public class TextSong
 {
-    public class TextSong
-    {
-        public int Id { get; set; }
+    public int Id { get; set; }
 
-        public string Text { get; set; }
+    public string Text { get; set; }
 
-        public string Translate { get; set; }
+    public string Translate { get; set; }
 
-        public int SongId { get; set; }
-
-
-
-    }
+    public int TrackId { get; set; }
 }

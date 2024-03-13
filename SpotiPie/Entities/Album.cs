@@ -1,11 +1,10 @@
-﻿namespace SpotiPie.Entities
+﻿namespace SpotiPie.Entities;
+
+public class Album
 {
-    public class Album
-    {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public DateTime ReleaseYear { get; set; }
-        public int ArtistId { get; set; }
-    }
+    public int Id { get; set; }
+    public required string Name { get; set; }
+    public string? Description { get; set; }
+    public required DateTime ReleaseYear { get; set; }
+    public required int ArtistId { get; set; }
 }

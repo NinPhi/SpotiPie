@@ -1,13 +1,12 @@
-﻿namespace SpotiPie.Entities
+﻿namespace SpotiPie.Entities;
+
+public class User
 {
-    public class User
-    {
-        public int Id { get; set; }
+    public int Id { get; set; }
 
-        public string Login { get; set; } = string.Empty;
+    public required string Login { get; set; }
 
-        public string Password { get; set; } = string.Empty;
+    public required string Password { get; set; }
 
-        public required string Roles { get; set; } = "User";
-    }
+    public required string Roles { get; set; } = "User";
 }

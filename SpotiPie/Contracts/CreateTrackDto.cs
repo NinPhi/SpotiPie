@@ -6,13 +6,13 @@ public class CreateTrackDto
 {
     [Required]
     [MaxLength(100)]
-    public string Name { get; set; }
+    public string? Name { get; set; }
 
     [Required]
     [MaxLength(10)]
-    public string Duration { get; init; }
+    public string? Duration { get; init; }
 
     [Required]
     [MaxLength(50)]
-    public string ReleaseDate { get; init; }
+    public DateTime ReleaseDate { get; init; }
 }

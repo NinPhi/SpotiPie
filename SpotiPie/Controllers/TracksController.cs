@@ -30,7 +30,7 @@ public class TracksController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> Get(long id)
+    public async Task<IActionResult> Get(int id)
     {
         try
         {
@@ -66,7 +66,7 @@ public class TracksController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> Update(long id, CreateTrackDto dto)
+    public async Task<IActionResult> Update(int id, CreateTrackDto dto)
     {
         try
         {
@@ -84,7 +84,7 @@ public class TracksController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    public async Task<IActionResult> Delete(long id)
+    public async Task<IActionResult> Delete(int id)
     {
         try
         {

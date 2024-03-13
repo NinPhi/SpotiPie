@@ -2,12 +2,11 @@
 
 public class Track
 {
-    public long Id { get; set; }
+    public int Id { get; set; }
 
-    public string Name { get; set; }
+    public required string Name { get; set; }
 
-    public string Duration { get; set; }
+    public required string Duration { get; set; }
 
-    public string ReleaseDate { get; set; }
-
+    public required DateTime ReleaseDate { get; set; }
 }

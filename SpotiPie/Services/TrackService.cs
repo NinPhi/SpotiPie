@@ -28,7 +28,7 @@ public class TrackService
         return trackDtos;
     }
 
-    public async Task<TrackDto> GetTrackByIdAsync(long id)
+    public async Task<TrackDto> GetTrackByIdAsync(int id)
     {
         var track = await _appDbContext.Tracks.FirstOrDefaultAsync(t => t.Id == id);
         if (track == null)
@@ -63,7 +63,7 @@ public class TrackService
         {
             Name = dto.Name,
             Duration = dto.Duration,
-            ReleaseDate = dto.ReleaseDate
+            ReleaseDate = dto.ReleaseDate,
         };
 
         _appDbContext.Add(track);
@@ -78,7 +78,7 @@ public class TrackService
         };
     }
 
-    public async Task<TrackDto> UpdateTrackAsync(long id, CreateTrackDto dto)
+    public async Task<TrackDto> UpdateTrackAsync(int id, CreateTrackDto dto)
     {
         var track = await _appDbContext.Tracks.FirstOrDefaultAsync(t => t.Id == id);
         if (track == null)
@@ -107,7 +107,7 @@ public class TrackService
         };
     }
 
-    public async Task<TrackDto> DeleteTrackAsync(long id)
+    public async Task<TrackDto> DeleteTrackAsync(int id)
     {
         var track = await _appDbContext.Tracks.FindAsync(id);
         if (track == null)
