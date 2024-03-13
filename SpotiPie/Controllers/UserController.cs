@@ -2,25 +2,23 @@
 using SpotiPie.Contracts;
 using SpotiPie.Services.Interface;
 
-namespace SpotiPie.Controllers
+namespace SpotiPie.Controllers;
+
+[Route("api/users")]
+[ApiController]
+public class UserController : ControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class UserController : ControllerBase
+    private readonly IUserService _userService;
+
+    public UserController(IUserService userService)
     {
-        private readonly IUserService _userService;
+        _userService = userService;
+    }
 
-        public UserController(IUserService userService)
-        {
-            _userService = userService;
-        }
-
-        [HttpPost("sign-up")]
-        public async Task<ActionResult> SignUp(UserDto userDto)
-        {
-            var user = await _userService.SignUpAsync(userDto);
-            return Ok(user);
-        }
-
+    [HttpPost("sign-up")]
+    public async Task<ActionResult> SignUp(UserDto userDto)
+    {
+        var user = await _userService.SignUpAsync(userDto);
+        return Ok(user);
     }
 }

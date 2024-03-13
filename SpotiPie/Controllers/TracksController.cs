@@ -4,7 +4,7 @@ using SpotiPie.Services;
 
 namespace SpotiPie.Controllers;
 
-[Route("api/[controller]")]
+[Route("api/tracks")]
 [ApiController]
 public class TracksController : ControllerBase
 {
@@ -48,7 +48,7 @@ public class TracksController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create([FromBody] CreateTrackDto dto)
+    public async Task<IActionResult> Create(CreateTrackDto dto)
     {
         try
         {
@@ -66,7 +66,7 @@ public class TracksController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> Update(long id, [FromBody] CreateTrackDto dto)
+    public async Task<IActionResult> Update(long id, CreateTrackDto dto)
     {
         try
         {

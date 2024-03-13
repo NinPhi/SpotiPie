@@ -2,37 +2,44 @@
 using SpotiPie.Services;
 using SpotiPie.Contracts;
 
-namespace SpotiPie.Controllers
-{
-    [ApiController]
-    [Route("api/Artists")]
-    public class ArtistsController : ControllerBase
-    {
-        private readonly ArtistService _artistService;
+namespace SpotiPie.Controllers;
 
-        [HttpGet("Get-All")]
-        public async Task<ActionResult> GetAllArtists()
-        {
-            var artists =await _artistService.GetAll();
-            return Ok(artists);
-        }
-        [HttpGet("Get-By-Id")]
-        public async Task<ActionResult> Get(int Id)
-        {
-            var artist = await _artistService.Get(Id);
-            return Ok(artist);
-        }
-        [HttpPost("Add")]
-        public async Task<ActionResult> AddArtist(ArtistDto artist)
-        {
-            await _artistService.Add(artist);
-            return Ok(artist);
-        }
-        [HttpDelete("Delete")]
-        public async Task<ActionResult> DeleteArtist(int Id)
-        {
-            await _artistService.Delete(Id);
-            return NoContent();
-        }
+[ApiController]
+[Route("api/artists")]
+public class ArtistsController : ControllerBase
+{
+    private readonly ArtistService _artistService;
+
+    public ArtistsController(ArtistService artistService)
+    {
+        _artistService = artistService;
+    }
+
+    [HttpGet]
+    public async Task<ActionResult> GetAllArtists()
+    {
+        var artists = await _artistService.GetAll();
+        return Ok(artists);
+    }
+
+    [HttpGet("{id}")]
+    public async Task<ActionResult> Get(int id)
+    {
+        var artist = await _artistService.Get(id);
+        return Ok(artist);
+    }
+
+    [HttpPost]
+    public async Task<ActionResult> AddArtist(ArtistDto artist)
+    {
+        await _artistService.Add(artist);
+        return Ok(artist);
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<ActionResult> DeleteArtist(int id)
+    {
+        await _artistService.Delete(id);
+        return NoContent();
     }
 }
