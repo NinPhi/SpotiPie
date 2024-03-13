@@ -1,12 +1,16 @@
 using Microsoft.EntityFrameworkCore;
 using SpotiPie.Data;
 using SpotiPie.Services;
-using SpotiPie.Services.Interface;
 using SpotiPie.Services.Interfaces;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(opts =>
+{
+    opts.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+});
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddHttpContextAccessor();
@@ -16,6 +20,7 @@ builder.Services.AddAuthentication().AddCookie("cookie");
 builder.Services.AddTransient<ITextsService, TextService>();
 builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddScoped<IAlbumService, AlbumService>();
+builder.Services.AddTransient<IGenreService, GenreService>();
 builder.Services.AddScoped<TrackService>();
 
 builder.Services.AddDbContext<AppDbContext>(opts =>
@@ -37,4 +42,3 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
-

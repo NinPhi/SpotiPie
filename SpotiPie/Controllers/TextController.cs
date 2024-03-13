@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using SpotiPie.Data;
 using SpotiPie.Entities;
 using SpotiPie.Services.Interfaces;
 
@@ -19,21 +18,21 @@ public class TextController : ControllerBase
     [HttpGet("{id}")]
     public async Task<ActionResult> Get(int id)
     {
-        var text = await _textsService.GetTextById(id);
+        var text = await _textsService.GetTextByIdAsync(id);
         return Ok(text);
     }
 
     [HttpGet]
     public async Task<ActionResult> GetAllText()
     {
-        var text = await _textsService.GetAllText();
+        var text = await _textsService.GetAllTextsAsync();
         return Ok(text);
     }
 
     [HttpPost]
     public async Task<ActionResult> PostText(TextSong textSong)
     {
-        await _textsService.PostText(textSong);
+        await _textsService.PostTextAsync(textSong);
         return Ok();
     }
 }

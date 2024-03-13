@@ -10,6 +10,7 @@ public class AppDbContext : DbContext
     public DbSet<Track> Tracks => Set<Track>();
     public DbSet<User> Users => Set<User>();
     public DbSet<TextSong> Texts => Set<TextSong>();
+    public DbSet<Genre> Genres => Set<Genre>();
 
     public AppDbContext(DbContextOptions<AppDbContext> opts) : base(opts) { }
 
@@ -17,3 +18,4 @@ public class AppDbContext : DbContext
     {
     }
 }
+

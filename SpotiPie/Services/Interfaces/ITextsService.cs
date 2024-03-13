@@ -1,14 +1,10 @@
 ﻿using SpotiPie.Entities;
 
-namespace SpotiPie.Services.Interfaces
+namespace SpotiPie.Services.Interfaces;
+
+public interface ITextsService
 {
-    public interface ITextsService
-    {
-        public Task<List<TextSong>> GetAllText();
-        public Task<TextSong> GetTextById(int id);
-        public Task PostText(TextSong textSong);
-
-
-
-    }
+    public Task<List<TextSong>> GetAllTextsAsync();
+    public Task<TextSong> GetTextByIdAsync(int id);
+    public Task PostTextAsync(TextSong textSong);
 }

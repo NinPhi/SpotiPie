@@ -1,7 +1,7 @@
 ﻿using SpotiPie.Contracts;
 using SpotiPie.Entities;
 
-namespace SpotiPie.Services.Interface
+namespace SpotiPie.Services.Interfaces
 {
     public interface IUserService
     {

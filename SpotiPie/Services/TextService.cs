@@ -3,39 +3,34 @@ using SpotiPie.Data;
 using SpotiPie.Entities;
 using SpotiPie.Services.Interfaces;
 
-namespace SpotiPie.Services
-{
-    public class TextService : ITextsService
+namespace SpotiPie.Services;
 
+public class TextService : ITextsService
+{
+    private readonly AppDbContext _db;
+
+    public TextService(AppDbContext db)
+    {
+        _db = db;
+    }
+
+    public async Task<List<TextSong>> GetAllTextsAsync()
     {
 
-        private readonly AppDbContext _db;
+        return await _db.Texts.ToListAsync();
+    }
 
-        public TextService(AppDbContext db)
-        {
-            _db = db;
-        }
+    public async Task<TextSong?> GetTextByIdAsync(int id)
+    {
+        var text = await _db.Texts.FirstOrDefaultAsync(x => x.Id == id);
 
-        public async Task<List<TextSong>> GetAllText()
-        {
-            
-            return await _db.Texts.ToListAsync();
-        }
+        return text;
+    }
 
-        public async Task<TextSong> GetTextById(int id)
-        {
-            var text = await _db.Texts.FirstOrDefaultAsync(x => x.Id == id);
+    public async Task PostTextAsync(TextSong textSong)
+    {
+        await _db.Texts.AddAsync(textSong);
+        await _db.SaveChangesAsync();
 
-            return text;
-        }
-
-        public async Task PostText(TextSong textSong)
-        {
-            await _db.Texts.AddAsync(textSong);
-            await _db.SaveChangesAsync();
-
-        }
-
-        
     }
 }

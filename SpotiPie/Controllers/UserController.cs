@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SpotiPie.Contracts;
-using SpotiPie.Services.Interface;
+using SpotiPie.Services.Interfaces;
 
 namespace SpotiPie.Controllers;
 
