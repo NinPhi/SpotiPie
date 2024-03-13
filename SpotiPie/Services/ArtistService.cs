@@ -18,7 +18,7 @@ namespace SpotiPie.Services
 
         public async Task<Artist> Get(int id)
         {
-            var artist = await _db.Artists.FirstOrDefaultAsync(x => x.ArtistId == id);
+            var artist = await _db.Artists.FirstOrDefaultAsync(x => x.Id == id);
             return artist;
         }
         public async Task<List<Artist>> GetAll()
@@ -29,7 +29,7 @@ namespace SpotiPie.Services
         {
             var artist = new Artist()
             {
-                ArtistId = artistDto.ArtistId,
+                Id = artistDto.ArtistId,
                 Pseudonym = artistDto.Pseudonym,
             };
             await _db.Artists.AddAsync(artist);
@@ -37,7 +37,7 @@ namespace SpotiPie.Services
         }
         public async Task Delete(int Id)
         {
-            await _db.Artists.Where(x => x.ArtistId == Id).ExecuteDeleteAsync();
+            await _db.Artists.Where(x => x.Id == Id).ExecuteDeleteAsync();
             await _db.SaveChangesAsync();
         }
         
