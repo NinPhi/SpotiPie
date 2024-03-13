@@ -1,13 +1,16 @@
 ﻿using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
+using SpotiPie.Data;
 using SpotiPie.DTO;
 using SpotiPie.Models;
 using System.Threading.Tasks;
+
 namespace SpotiPie.Services
 {
     public class ArtistService
     {
         private readonly AppDbContext _db;
+
         public ArtistService(AppDbContext appDbContext) 
         {
             _db = appDbContext;
