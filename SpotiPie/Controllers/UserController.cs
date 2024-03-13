@@ -1,9 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using SpotiPie.Data;
-using SpotiPie.Entity;
+﻿using Microsoft.AspNetCore.Mvc;
+using SpotiPie.Contracts;
 using SpotiPie.Services.Interface;
-using System.Reflection.Metadata;
 
 namespace SpotiPie.Controllers
 {

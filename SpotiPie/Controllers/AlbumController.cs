@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using SpotiPie.Dtos.Album;
-using SpotiPie.Interfaces;
+using SpotiPie.Contracts;
+using SpotiPie.Services.Interfaces;
 
 namespace SpotiPie.Controllers
 {

@@ -1,4 +1,4 @@
-﻿namespace SpotiPie.Text
+﻿namespace SpotiPie.Entities
 {
     public class TextSong
     {

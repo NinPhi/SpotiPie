@@ -1,8 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SpotiPie.Models;
 using SpotiPie.Entities;
-using SpotiPie.Entity;
-using SpotiPie.Text;
 
 namespace SpotiPie.Data;
 

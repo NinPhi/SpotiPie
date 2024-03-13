@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using SpotiPie.Contracts;
 using SpotiPie.Data;
-using SpotiPie.Dtos.Album;
-using SpotiPie.Interfaces;
+using SpotiPie.Services.Interfaces;
 
 namespace SpotiPie.Services
 {

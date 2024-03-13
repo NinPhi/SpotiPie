@@ -1,6 +1,4 @@
-﻿using SpotiPie.Entities;
-
-namespace SpotiPie.Dtos.Album
+﻿namespace SpotiPie.Contracts
 {
     public class AlbumGetDto
     {

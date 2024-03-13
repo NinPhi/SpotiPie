@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace SpotiPie.Models
+﻿namespace SpotiPie.Entities
 {
     public class Artist
     {

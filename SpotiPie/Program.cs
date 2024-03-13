@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using SpotiPie.Data;
-using SpotiPie.Interfaces;
 using SpotiPie.Services;
 using SpotiPie.Services.Interface;
+using SpotiPie.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 

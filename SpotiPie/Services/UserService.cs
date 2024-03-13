@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication;
-using Microsoft.EntityFrameworkCore;
+using SpotiPie.Contracts;
 using SpotiPie.Data;
-using SpotiPie.Entity;
+using SpotiPie.Entities;
 using SpotiPie.Services.Interface;
 using System.Security.Claims;
 

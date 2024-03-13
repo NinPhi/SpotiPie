@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using SpotiPie.Models;
 using SpotiPie.Services;
-using SpotiPie.DTO;
+using SpotiPie.Contracts;
 
 namespace SpotiPie.Controllers
 {

@@ -1,9 +1,7 @@
-﻿using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using SpotiPie.Contracts;
 using SpotiPie.Data;
-using SpotiPie.DTO;
-using SpotiPie.Models;
-using System.Threading.Tasks;
+using SpotiPie.Entities;
 
 namespace SpotiPie.Services
 {

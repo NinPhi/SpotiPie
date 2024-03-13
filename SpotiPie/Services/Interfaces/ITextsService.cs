@@ -1,6 +1,6 @@
-﻿using SpotiPie.Text;
+﻿using SpotiPie.Entities;
 
-namespace SpotiPie.Services
+namespace SpotiPie.Services.Interfaces
 {
     public interface ITextsService
     {
