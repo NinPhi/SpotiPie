@@ -13,6 +13,7 @@ builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddAuthentication().AddCookie("cookie");
 
+builder.Services.AddTransient<ITextsService, TextService>();
 builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddScoped<IAlbumService, AlbumService>();
 builder.Services.AddScoped<TrackService>();
@@ -36,3 +37,4 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+

@@ -4,7 +4,7 @@
     <TargetFramework>net7.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <UserSecretsId>d9ed78ca-4adf-4729-8b64-80093c6bb20f</UserSecretsId>
+    <UserSecretsId>spotipie-secrets</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
