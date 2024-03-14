@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SpotiPie.Contracts;
 using SpotiPie.Services.Interfaces;
 
 namespace SpotiPie.Controllers;
@@ -20,5 +21,13 @@ public class AlbumsController : ControllerBase
         var albumDto = await _albumService.GetByIdAsync(id);
 
         return Ok(albumDto);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Create(AlbumCreateDto albumDto)
+    {
+        var albumGetDto = await _albumService.CreateAsync(albumDto);
+
+        return Created($"api/albums/{albumGetDto.Id}", albumGetDto);
     }
 }

@@ -8,9 +8,9 @@ public record LyricsCreateDto
     public int TrackId { get; init; }
 
     [Required(AllowEmptyStrings = false)]
-    [StringLength(2000)]
+    [StringLength(4000)]
     public string? Text { get; init; }
 
-    [StringLength(2000)]
+    [StringLength(4000)]
     public string? Translation { get; init; }
 }
