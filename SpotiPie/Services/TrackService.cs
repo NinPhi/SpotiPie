@@ -22,6 +22,8 @@ public class TrackService : ITrackService
         var trackDtos = tracks.Select(t => new TrackGetDto
         {
             Id = t.Id,
+            ArtistId = t.ArtistId,
+            AlbumId = t.AlbumId,
             Name = t.Name,
             Duration = t.Duration,
             ReleaseDate = t.ReleaseDate,
@@ -40,6 +42,8 @@ public class TrackService : ITrackService
         var trackDto = new TrackGetDto
         {
             Id = track.Id,
+            ArtistId = track.ArtistId,
+            AlbumId = track.AlbumId,
             Name = track.Name,
             Duration = track.Duration,
             ReleaseDate = track.ReleaseDate,
@@ -52,6 +56,8 @@ public class TrackService : ITrackService
     {
         var track = new Track
         {
+            ArtistId = dto.ArtistId,
+            AlbumId = dto.AlbumId,
             Name = dto.Name!,
             Duration = dto.Duration!,
             ReleaseDate = dto.ReleaseDate,
@@ -63,6 +69,8 @@ public class TrackService : ITrackService
         var trackDto = new TrackGetDto
         {
             Id = track.Id,
+            ArtistId = track.ArtistId,
+            AlbumId = track.AlbumId,
             Name = track.Name,
             Duration = track.Duration,
             ReleaseDate = track.ReleaseDate
@@ -87,6 +95,8 @@ public class TrackService : ITrackService
         var trackGetDto = new TrackGetDto
         {
             Id = track.Id,
+            ArtistId = track.ArtistId,
+            AlbumId = track.AlbumId,
             Name = track.Name,
             Duration = track.Duration,
             ReleaseDate = track.ReleaseDate,
@@ -101,7 +111,7 @@ public class TrackService : ITrackService
 
         if (track is null) return;
 
-        _dbContext.Remove(track);
+        _dbContext.Tracks.Remove(track);
         await _dbContext.SaveChangesAsync();
     }
 }
