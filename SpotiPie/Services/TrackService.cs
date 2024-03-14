@@ -2,10 +2,11 @@
 using SpotiPie.Data;
 using SpotiPie.Entities;
 using SpotiPie.Entities.Contracts;
+using SpotiPie.Services.Interfaces;
 
 namespace SpotiPie.Services;
 
-public class TrackService
+public class TrackService : ITrackService
 {
     private readonly AppDbContext _dbContext;
 
@@ -70,14 +71,11 @@ public class TrackService
         return trackDto;
     }
 
-    public async Task<TrackGetDto> UpdateAsync(int id, TrackCreateDto trackDto)
+    public async Task<TrackGetDto?> UpdateAsync(int id, TrackCreateDto trackDto)
     {
         var track = await _dbContext.Tracks.FindAsync(id);
 
-        if (track is null)
-        {
-            throw new ArgumentException("Track not found.");
-        }
+        if (track is null) return null;
 
         track.Name = trackDto.Name!;
         track.Duration = trackDto.Duration!;

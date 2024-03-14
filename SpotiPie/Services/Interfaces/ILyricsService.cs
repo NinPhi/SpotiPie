@@ -6,5 +6,5 @@ public interface ILyricsService
 {
     public Task<LyricsGetDto?> GetByIdAsync(int id);
     public Task<List<LyricsGetDto>> GetAllAsync();
-    public Task CreateAsync(LyricsCreateDto textSong);
+    public Task CreateAsync(LyricsCreateDto lyricsDto);
 }

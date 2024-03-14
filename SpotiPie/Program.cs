@@ -21,7 +21,7 @@ builder.Services.AddTransient<ILyricsService, LyricsService>();
 builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddScoped<IAlbumService, AlbumService>();
 builder.Services.AddTransient<IGenreService, GenreService>();
-builder.Services.AddScoped<TrackService>();
+builder.Services.AddScoped<ITrackService, TrackService>();
 
 builder.Services.AddDbContext<AppDbContext>(opts =>
     opts.UseSqlServer(builder.Configuration.GetConnectionString(nameof(AppDbContext))));
