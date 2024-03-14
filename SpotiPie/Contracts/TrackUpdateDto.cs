@@ -2,13 +2,8 @@
 
 namespace SpotiPie.Entities.Contracts;
 
-public record TrackCreateDto
+public record TrackUpdateDto
 {
-    [Required]
-    public int ArtistId { get; set; }
-
-    public int? AlbumId { get; set; }
-
     [Required(AllowEmptyStrings = false)]
     [StringLength(100)]
     public string? Name { get; init; }
