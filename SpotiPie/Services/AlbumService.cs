@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using SpotiPie.Contracts;
+﻿using SpotiPie.Contracts;
 using SpotiPie.Data;
 using SpotiPie.Services.Interfaces;
 

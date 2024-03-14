@@ -29,7 +29,7 @@ public class GenreService : IGenreService
         return genreDtos;
     }
 
-    public async Task CreateAsync(GenreCreateDto genreDto)
+    public async Task<GenreGetDto> CreateAsync(GenreCreateDto genreDto)
     {
         var genre = new Genre
         {
@@ -38,17 +38,33 @@ public class GenreService : IGenreService
 
         await _dbContext.Genres.AddAsync(genre);
         await _dbContext.SaveChangesAsync();
+
+        var genreGetDto = new GenreGetDto
+        {
+            Id = genre.Id,
+            Name = genre.Name,
+        };
+
+        return genreGetDto;
     }
 
-    public async Task UpdateAsync(int id, GenreCreateDto genreDto)
+    public async Task<GenreGetDto?> UpdateAsync(int id, GenreCreateDto genreDto)
     {
         var genre = await _dbContext.Genres.FindAsync(id);
 
-        if (genre is null) throw new Exception("Genre not found.");
+        if (genre is null) return null;
 
         genre.Name = genreDto.Name!;
 
         await _dbContext.SaveChangesAsync();
+
+        var genreGetDto = new GenreGetDto
+        {
+            Id = genre.Id,
+            Name = genre.Name,
+        };
+
+        return genreGetDto;
     }
 
     public async Task DeleteAsync(int id)

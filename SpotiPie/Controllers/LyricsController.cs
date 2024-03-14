@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using SpotiPie.Entities;
+using SpotiPie.Contracts;
 using SpotiPie.Services.Interfaces;
 
 namespace SpotiPie.Controllers;
@@ -16,23 +16,26 @@ public class LyricsController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult> Get(int id)
+    public async Task<ActionResult> GetById(int id)
     {
-        var text = await _lyricsService.GetByIdAsync(id);
-        return Ok(text);
+        var lyricsDto = await _lyricsService.GetByIdAsync(id);
+
+        return Ok(lyricsDto);
     }
 
     [HttpGet]
     public async Task<ActionResult> GetAll()
     {
-        var text = await _lyricsService.GetAllAsync();
-        return Ok(text);
+        var lyricsDtos = await _lyricsService.GetAllAsync();
+
+        return Ok(lyricsDtos);
     }
 
     [HttpPost]
-    public async Task<ActionResult> Create(Lyrics textSong)
+    public async Task<ActionResult> Create(LyricsCreateDto lyricsDto)
     {
-        await _lyricsService.CreateAsync(textSong);
-        return Ok();
+        await _lyricsService.CreateAsync(lyricsDto);
+
+        return NoContent();
     }
 }

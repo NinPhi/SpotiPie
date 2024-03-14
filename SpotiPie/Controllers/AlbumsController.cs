@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using SpotiPie.Contracts;
 using SpotiPie.Services.Interfaces;
 
 namespace SpotiPie.Controllers;
@@ -16,10 +15,10 @@ public class AlbumsController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<AlbumGetDto>> GetById(int id)
+    public async Task<IActionResult> GetById(int id)
     {
-        var album = await _albumService.GetByIdAsync(id);
+        var albumDto = await _albumService.GetByIdAsync(id);
 
-        return Ok(album);
+        return Ok(albumDto);
     }
 }

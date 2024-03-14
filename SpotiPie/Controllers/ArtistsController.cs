@@ -16,30 +16,37 @@ public class ArtistsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult> GetAll()
+    public async Task<IActionResult> GetAll()
     {
-        var artists = await _artistService.GetAllAsync();
-        return Ok(artists);
+        var artistDtos = await _artistService.GetAllAsync();
+
+        return Ok(artistDtos);
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult> Get(int id)
+    public async Task<IActionResult> GetById(int id)
     {
-        var artist = await _artistService.GetByIdAsync(id);
-        return Ok(artist);
+        var artistDto = await _artistService.GetByIdAsync(id);
+
+        if (artistDto is null)
+            return NotFound();
+
+        return Ok(artistDto);
     }
 
     [HttpPost]
-    public async Task<ActionResult> Create(ArtistCreateDto artist)
+    public async Task<IActionResult> Create(ArtistCreateDto artistDto)
     {
-        await _artistService.CreateAsync(artist);
-        return Ok(artist);
+        await _artistService.CreateAsync(artistDto);
+
+        return NoContent();
     }
 
     [HttpDelete("{id}")]
-    public async Task<ActionResult> Delete(int id)
+    public async Task<IActionResult> Delete(int id)
     {
         await _artistService.DeleteAsync(id);
+
         return NoContent();
     }
 }

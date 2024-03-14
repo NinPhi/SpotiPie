@@ -19,21 +19,27 @@ public class GenresController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
-        var genres = await _genreService.GetAllAsync();
-        return Ok(genres);
+        var genreDtos = await _genreService.GetAllAsync();
+
+        return Ok(genreDtos);
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create(GenreCreateDto genre)
+    public async Task<IActionResult> Create(GenreCreateDto genreDto)
     {
-        await _genreService.CreateAsync(genre);
-        return NoContent();
+        var genreGetDto = await _genreService.CreateAsync(genreDto);
+
+        return Created(string.Empty, genreGetDto);
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> Update(int id, GenreCreateDto genre)
+    public async Task<IActionResult> Update(int id, GenreCreateDto genreDto)
     {
-        await _genreService.UpdateAsync(id, genre);
+        var genreGetDto = await _genreService.UpdateAsync(id, genreDto);
+
+        if (genreGetDto is null)
+            return NotFound();
+
         return NoContent();
     }
 
@@ -41,6 +47,7 @@ public class GenresController : ControllerBase
     public async Task<ActionResult<Genre>> Delete(int id)
     {
         await _genreService.DeleteAsync(id);
+
         return NoContent();
     }
 }

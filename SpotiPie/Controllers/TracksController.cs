@@ -18,86 +18,46 @@ public class TracksController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
-        try
-        {
-            var tracks = await _trackService.GetAllAsync();
-            return Ok(tracks);
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, $"Internal server error: {ex.Message}");
-        }
+        var trackDtos = await _trackService.GetAllAsync();
+
+        return Ok(trackDtos);
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> Get(int id)
+    public async Task<IActionResult> GetById(int id)
     {
-        try
-        {
-            var track = await _trackService.GetByIdAsync(id);
-            return Ok(track);
-        }
-        catch (ArgumentException ex)
-        {
-            return NotFound(ex.Message);
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, $"Internal server error: {ex.Message}");
-        }
+        var trackDto = await _trackService.GetByIdAsync(id);
+
+        if (trackDto is null)
+            return NotFound();
+
+        return Ok(trackDto);
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create(TrackCreateDto dto)
+    public async Task<IActionResult> Create(TrackCreateDto trackDto)
     {
-        try
-        {
-            var createdTrack = await _trackService.CreateAsync(dto);
-            return NoContent();
-        }
-        catch (ArgumentException ex)
-        {
-            return BadRequest(ex.Message);
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, $"Internal server error: {ex.Message}. Inner Exception: {ex.InnerException?.Message}");
-        }
+        var trackGetDto = await _trackService.CreateAsync(trackDto);
+
+        return Created($"api/tracks/{trackGetDto.Id}", trackGetDto);
     }
 
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(int id, TrackCreateDto dto)
     {
-        try
-        {
-            await _trackService.UpdateAsync(id, dto);
-            return NoContent();
-        }
-        catch (ArgumentException ex)
-        {
-            return NotFound(ex.Message);
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, $"Internal server error: {ex.Message}");
-        }
+        var trackGetDto = await _trackService.UpdateAsync(id, dto);
+
+        if (trackGetDto is null)
+            return NotFound();
+
+        return NoContent();
     }
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {
-        try
-        {
-            await _trackService.DeleteAsync(id);
-            return NoContent();
-        }
-        catch (ArgumentException ex)
-        {
-            return NotFound(ex.Message);
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, $"Internal server error: {ex.Message}");
-        }
+        await _trackService.DeleteAsync(id);
+
+        return NoContent();
     }
 }

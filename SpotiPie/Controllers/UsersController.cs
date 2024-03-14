@@ -18,7 +18,8 @@ public class UsersController : ControllerBase
     [HttpPost("sign-up")]
     public async Task<ActionResult> SignUp(UserCreateDto userDto)
     {
-        var user = await _userService.SignUpAsync(userDto);
-        return Ok(user);
+        var userGetDto = await _userService.SignUpAsync(userDto);
+
+        return Ok(userGetDto);
     }
 }

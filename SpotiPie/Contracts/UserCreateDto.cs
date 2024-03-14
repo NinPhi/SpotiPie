@@ -5,10 +5,10 @@ namespace SpotiPie.Contracts;
 public record UserCreateDto
 {
     [Required(AllowEmptyStrings = false)]
-    [StringLength(200)]
+    [StringLength(200, MinimumLength = 4)]
     public string? Login { get; init; }
 
     [Required(AllowEmptyStrings = false)]
-    [StringLength(200)]
+    [StringLength(200, MinimumLength = 4)]
     public string? Password { get; init; }
 }
