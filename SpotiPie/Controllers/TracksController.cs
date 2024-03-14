@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SpotiPie.Entities.Contracts;
-using SpotiPie.Services;
+using SpotiPie.Services.Interfaces;
 
 namespace SpotiPie.Controllers;
 
@@ -8,9 +8,9 @@ namespace SpotiPie.Controllers;
 [ApiController]
 public class TracksController : ControllerBase
 {
-    private readonly TrackService _trackService;
+    private readonly ITrackService _trackService;
 
-    public TracksController(TrackService trackService)
+    public TracksController(ITrackService trackService)
     {
         _trackService = trackService;
     }

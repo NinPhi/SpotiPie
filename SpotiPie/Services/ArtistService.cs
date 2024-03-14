@@ -2,14 +2,15 @@
 using SpotiPie.Contracts;
 using SpotiPie.Data;
 using SpotiPie.Entities;
+using SpotiPie.Services.Interfaces;
 
 namespace SpotiPie.Services;
 
-public class ArtistService
+public class ArtistService : IArtistService
 {
     private readonly AppDbContext _dbContext;
 
-    public ArtistService(AppDbContext dbContext) 
+    public ArtistService(AppDbContext dbContext)
     {
         _dbContext = dbContext;
     }

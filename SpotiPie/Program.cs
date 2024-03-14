@@ -17,11 +17,12 @@ builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddAuthentication().AddCookie("cookie");
 
+builder.Services.AddTransient<IArtistService, ArtistService>();
 builder.Services.AddTransient<ILyricsService, LyricsService>();
 builder.Services.AddTransient<IUserService, UserService>();
-builder.Services.AddScoped<IAlbumService, AlbumService>();
+builder.Services.AddTransient<IAlbumService, AlbumService>();
 builder.Services.AddTransient<IGenreService, GenreService>();
-builder.Services.AddScoped<ITrackService, TrackService>();
+builder.Services.AddTransient<ITrackService, TrackService>();
 
 builder.Services.AddDbContext<AppDbContext>(opts =>
     opts.UseSqlServer(builder.Configuration.GetConnectionString(nameof(AppDbContext))));

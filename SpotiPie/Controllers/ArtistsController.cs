@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using SpotiPie.Services;
 using SpotiPie.Contracts;
+using SpotiPie.Services.Interfaces;
 
 namespace SpotiPie.Controllers;
 
@@ -8,9 +8,9 @@ namespace SpotiPie.Controllers;
 [Route("api/artists")]
 public class ArtistsController : ControllerBase
 {
-    private readonly ArtistService _artistService;
+    private readonly IArtistService _artistService;
 
-    public ArtistsController(ArtistService artistService)
+    public ArtistsController(IArtistService artistService)
     {
         _artistService = artistService;
     }
