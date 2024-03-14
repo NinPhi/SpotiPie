@@ -17,7 +17,7 @@ builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddAuthentication().AddCookie("cookie");
 
-builder.Services.AddTransient<ITextsService, TextService>();
+builder.Services.AddTransient<ILyricsService, LyricsService>();
 builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddScoped<IAlbumService, AlbumService>();
 builder.Services.AddTransient<IGenreService, GenreService>();

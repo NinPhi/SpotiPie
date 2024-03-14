@@ -3,41 +3,68 @@ using SpotiPie.Contracts;
 using SpotiPie.Data;
 using SpotiPie.Entities;
 
-namespace SpotiPie.Services
+namespace SpotiPie.Services;
+
+public class ArtistService
 {
-    public class ArtistService
+    private readonly AppDbContext _dbContext;
+
+    public ArtistService(AppDbContext dbContext) 
     {
-        private readonly AppDbContext _db;
+        _dbContext = dbContext;
+    }
 
-        public ArtistService(AppDbContext appDbContext) 
-        {
-            _db = appDbContext;
-        }
+    public async Task<ArtistGetDto?> GetByIdAsync(int id)
+    {
+        var artist = await _dbContext.Artists.FindAsync(id);
 
-        public async Task<Artist> Get(int id)
+        if (artist is null) return null;
+
+        var artistDto = new ArtistGetDto
         {
-            var artist = await _db.Artists.FirstOrDefaultAsync(x => x.Id == id);
-            return artist;
-        }
-        public async Task<List<Artist>> GetAll()
+            Id = artist.Id,
+            Pseudonym = artist.Pseudonym,
+            MonthlyListeners = artist.MonthlyListeners,
+            Followers = artist.Followers,
+        };
+
+        return artistDto;
+    }
+
+    public async Task<List<ArtistGetDto>> GetAllAsync()
+    {
+        var artists = await _dbContext.Artists.ToListAsync();
+
+        var artistDtos = artists.Select(a => new ArtistGetDto
         {
-            return await _db.Artists.ToListAsync();
-        }
-        public async Task Add(ArtistDto artistDto)
+            Id = a.Id,
+            Pseudonym = a.Pseudonym,
+            MonthlyListeners = a.MonthlyListeners,
+            Followers = a.Followers,
+
+        }).ToList();
+
+        return artistDtos;
+    }
+
+    public async Task CreateAsync(ArtistCreateDto artistDto)
+    {
+        var artist = new Artist()
         {
-            var artist = new Artist()
-            {
-                Id = artistDto.ArtistId,
-                Pseudonym = artistDto.Pseudonym,
-            };
-            await _db.Artists.AddAsync(artist);
-            await _db.SaveChangesAsync();
-        }
-        public async Task Delete(int Id)
-        {
-            await _db.Artists.Where(x => x.Id == Id).ExecuteDeleteAsync();
-            await _db.SaveChangesAsync();
-        }
-        
+            Pseudonym = artistDto.Pseudonym!,
+        };
+
+        await _dbContext.Artists.AddAsync(artist);
+        await _dbContext.SaveChangesAsync();
+    }
+
+    public async Task DeleteAsync(int id)
+    {
+        var artist = await _dbContext.Artists.FindAsync(id);
+
+        if (artist is null) return;
+
+        _dbContext.Artists.Remove(artist);
+        await _dbContext.SaveChangesAsync();
     }
 }

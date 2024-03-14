@@ -6,17 +6,17 @@ namespace SpotiPie.Controllers;
 
 [Route("api/users")]
 [ApiController]
-public class UserController : ControllerBase
+public class UsersController : ControllerBase
 {
     private readonly IUserService _userService;
 
-    public UserController(IUserService userService)
+    public UsersController(IUserService userService)
     {
         _userService = userService;
     }
 
     [HttpPost("sign-up")]
-    public async Task<ActionResult> SignUp(UserDto userDto)
+    public async Task<ActionResult> SignUp(UserCreateDto userDto)
     {
         var user = await _userService.SignUpAsync(userDto);
         return Ok(user);

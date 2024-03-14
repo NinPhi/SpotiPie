@@ -7,36 +7,59 @@ namespace SpotiPie.Services;
 
 public class TrackService
 {
-    private readonly AppDbContext _appDbContext;
+    private readonly AppDbContext _dbContext;
 
-    public TrackService(AppDbContext appDbContext)
+    public TrackService(AppDbContext dbContext)
     {
-        _appDbContext = appDbContext;
+        _dbContext = dbContext;
     }
 
-
-    public async Task<List<TrackDto>> GetAllTracksAsync()
+    public async Task<List<TrackGetDto>> GetAllAsync()
     {
-        var tracks = await _appDbContext.Tracks.ToListAsync();
-        var trackDtos = tracks.Select(t => new TrackDto
+        var tracks = await _dbContext.Tracks.ToListAsync();
+
+        var trackDtos = tracks.Select(t => new TrackGetDto
         {
             Id = t.Id,
             Name = t.Name,
             Duration = t.Duration,
-            ReleaseDate = t.ReleaseDate
+            ReleaseDate = t.ReleaseDate,
+
         }).ToList();
+
         return trackDtos;
     }
 
-    public async Task<TrackDto> GetTrackByIdAsync(int id)
+    public async Task<TrackGetDto?> GetByIdAsync(int id)
     {
-        var track = await _appDbContext.Tracks.FirstOrDefaultAsync(t => t.Id == id);
-        if (track == null)
-        {
-            throw new ArgumentException("Track not found.");
-        }
+        var track = await _dbContext.Tracks.FindAsync(id);
 
-        var trackDto = new TrackDto
+        if (track is null) return null;
+
+        var trackDto = new TrackGetDto
+        {
+            Id = track.Id,
+            Name = track.Name,
+            Duration = track.Duration,
+            ReleaseDate = track.ReleaseDate,
+        };
+
+        return trackDto;
+    }
+
+    public async Task<TrackGetDto> CreateAsync(TrackCreateDto dto)
+    {
+        var track = new Track
+        {
+            Name = dto.Name!,
+            Duration = dto.Duration!,
+            ReleaseDate = dto.ReleaseDate,
+        };
+
+        await _dbContext.AddAsync(track);
+        await _dbContext.SaveChangesAsync();
+
+        var trackDto = new TrackGetDto
         {
             Id = track.Id,
             Name = track.Name,
@@ -47,83 +70,40 @@ public class TrackService
         return trackDto;
     }
 
-    public async Task<TrackDto> CreateTrackAsync(CreateTrackDto dto)
+    public async Task<TrackGetDto> UpdateAsync(int id, TrackCreateDto trackDto)
     {
-        if (dto.Name == null || dto.Name.Length > 100)
-        {
-            throw new ArgumentException("Track name is required and should be less than 100 characters.");
-        }
+        var track = await _dbContext.Tracks.FindAsync(id);
 
-        if (dto.Duration == null)
-        {
-            throw new ArgumentException("Track duration is required.");
-        }
-
-        var track = new Track
-        {
-            Name = dto.Name,
-            Duration = dto.Duration,
-            ReleaseDate = dto.ReleaseDate,
-        };
-
-        _appDbContext.Add(track);
-        await _appDbContext.SaveChangesAsync();
-
-        return new TrackDto
-        {
-            Id = track.Id,
-            Name = track.Name,
-            Duration = track.Duration,
-            ReleaseDate = track.ReleaseDate
-        };
-    }
-
-    public async Task<TrackDto> UpdateTrackAsync(int id, CreateTrackDto dto)
-    {
-        var track = await _appDbContext.Tracks.FirstOrDefaultAsync(t => t.Id == id);
-        if (track == null)
+        if (track is null)
         {
             throw new ArgumentException("Track not found.");
         }
 
-        if (dto.Name == null || dto.Name.Length > 100)
-        {
-            throw new ArgumentException("Track name is required and should be less than 100 characters.");
-        }
+        track.Name = trackDto.Name!;
+        track.Duration = trackDto.Duration!;
+        track.ReleaseDate = trackDto.ReleaseDate;
 
-        track.Name = dto.Name;
-        track.Duration = dto.Duration;
-        track.ReleaseDate = dto.ReleaseDate;
+        _dbContext.Update(track);
+        await _dbContext.SaveChangesAsync();
 
-        _appDbContext.Update(track);
-        await _appDbContext.SaveChangesAsync();
-
-        return new TrackDto
+        var trackGetDto = new TrackGetDto
         {
             Id = track.Id,
             Name = track.Name,
             Duration = track.Duration,
-            ReleaseDate = track.ReleaseDate
+            ReleaseDate = track.ReleaseDate,
         };
+
+        return trackGetDto;
     }
 
-    public async Task<TrackDto> DeleteTrackAsync(int id)
+    public async Task DeleteAsync(int id)
     {
-        var track = await _appDbContext.Tracks.FindAsync(id);
-        if (track == null)
-        {
-            throw new ArgumentException("Track not found.");
-        }
+        var track = await _dbContext.Tracks.FindAsync(id);
 
-        _appDbContext.Remove(track);
-        await _appDbContext.SaveChangesAsync();
+        if (track is null) return;
 
-        return new TrackDto
-        {
-            Id = track.Id,
-            Name = track.Name,
-            Duration = track.Duration,
-            ReleaseDate = track.ReleaseDate
-        };
+        _dbContext.Remove(track);
+        await _dbContext.SaveChangesAsync();
     }
 }

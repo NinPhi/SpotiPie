@@ -7,43 +7,59 @@ using System.Security.Claims;
 
 namespace SpotiPie.Services;
 
-public class UserService: IUserService
+public class UserService : IUserService
 {
-    private readonly AppDbContext _appDbContext;
+    private readonly AppDbContext _dbContext;
     private readonly HttpContext _httpContext;
 
-    public UserService(AppDbContext appDbContext, IHttpContextAccessor accessor)
+    public UserService(AppDbContext dbContext, IHttpContextAccessor accessor)
     {
-        _appDbContext = appDbContext;
+        _dbContext = dbContext;
 
-        if (accessor.HttpContext == null)
+        if (accessor.HttpContext is null)
         {
             throw new ArgumentException(nameof(accessor.HttpContext));
         }
+
         _httpContext = accessor.HttpContext;
     }
 
-    public async Task<User> SignUpAsync(UserDto userDto)
+    public async Task<UserGetDto> SignUpAsync(UserCreateDto userDto)
     {
-        User user = new()
+        var user = new User()
         {
-            Login = userDto.Login,
-            Password = userDto.Password,
+            Login = userDto.Login!,
+            Password = userDto.Password!,
             Roles = "User"
         };
 
-        _appDbContext.Users.Add(user);
-        await _appDbContext.SaveChangesAsync();
+        await _dbContext.Users.AddAsync(user);
+        await _dbContext.SaveChangesAsync();
 
+        var userGetDto = new UserGetDto
+        {
+            Id = user.Id,
+            Login = user.Login,
+            Roles = user.Roles,
+        };
+
+        await SignInWithHttpContext(userGetDto);
+
+        return userGetDto;
+    }
+
+    private Task SignInWithHttpContext(UserGetDto userDto)
+    {
         var claims = new List<Claim>()
         {
-            new(ClaimTypes.NameIdentifier, user.Id.ToString()),
-            new(ClaimTypes.Name, user.Login),
-            new(ClaimTypes.Role, user.Roles.ToString()),
+            new(ClaimTypes.NameIdentifier, userDto.Id.ToString()),
+            new(ClaimTypes.Name, userDto.Login),
+            new(ClaimTypes.Role, userDto.Roles),
         };
 
         var claimsIdentity = new ClaimsIdentity(claims, "cookie");
-        await _httpContext.SignInAsync(new ClaimsPrincipal(claimsIdentity));
-        return user;
+        var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
+
+        return _httpContext.SignInAsync(claimsPrincipal);
     }
 }

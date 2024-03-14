@@ -6,19 +6,19 @@ namespace SpotiPie.Controllers;
 
 [ApiController]
 [Route("api/albums")]
-public class AlbumController : ControllerBase
+public class AlbumsController : ControllerBase
 {
     private readonly IAlbumService _albumService;
 
-    public AlbumController(IAlbumService albumService)
+    public AlbumsController(IAlbumService albumService)
     {
         _albumService = albumService;
     }
 
-    [HttpGet("{albumId}")]
-    public async Task<ActionResult<AlbumGetDto>> GetAlbumById(int albumId)
+    [HttpGet("{id}")]
+    public async Task<ActionResult<AlbumGetDto>> GetById(int id)
     {
-        var album = await _albumService.GetAlbumByIdAsync(albumId);
+        var album = await _albumService.GetByIdAsync(id);
 
         return Ok(album);
     }

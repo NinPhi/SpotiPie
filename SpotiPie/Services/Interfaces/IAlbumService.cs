@@ -1,9 +1,8 @@
 ﻿using SpotiPie.Contracts;
 
-namespace SpotiPie.Services.Interfaces
+namespace SpotiPie.Services.Interfaces;
+
+public interface IAlbumService
 {
-    public interface IAlbumService
-    {
-        Task<AlbumGetDto> GetAlbumByIdAsync(int id);
-    }
+    public Task<AlbumGetDto?> GetByIdAsync(int id);
 }

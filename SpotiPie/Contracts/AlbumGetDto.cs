@@ -1,11 +1,10 @@
-﻿namespace SpotiPie.Contracts
+﻿namespace SpotiPie.Contracts;
+
+public record AlbumGetDto
 {
-    public class AlbumGetDto
-    {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public int ArtistId{ get; set; }
-        public DateTime ReleaseYear { get; set; }
-    }
+    public required int Id { get; init; }
+    public required int ArtistId{ get; init; }
+    public required string Name { get; init; }
+    public string? Description { get; init; }
+    public required DateTime ReleaseYear { get; init; }
 }

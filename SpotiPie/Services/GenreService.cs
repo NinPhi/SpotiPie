@@ -8,41 +8,56 @@ namespace SpotiPie.Services;
 
 public class GenreService : IGenreService
 {
-    private readonly AppDbContext _context;
+    private readonly AppDbContext _dbContext;
 
-    public GenreService(AppDbContext context)
+    public GenreService(AppDbContext dbContext)
     {
-        _context = context;
+        _dbContext = dbContext;
     }
 
-    public Task<List<Genre>> GetAllAsync() => 
-        _context.Genres.ToListAsync();
-
-    public async Task CreateAsync(GenreDto genre)
+    public async Task<List<GenreGetDto>> GetAllAsync()
     {
-        var file = new Genre
+        var genres = await _dbContext.Genres.ToListAsync();
+
+        var genreDtos = genres.Select(g => new GenreGetDto
         {
-            Name = genre.Name!
+            Id = g.Id,
+            Name = g.Name,
+
+        }).ToList();
+
+        return genreDtos;
+    }
+
+    public async Task CreateAsync(GenreCreateDto genreDto)
+    {
+        var genre = new Genre
+        {
+            Name = genreDto.Name!
         };
 
-        await _context.Genres.AddAsync(file);
-        await _context.SaveChangesAsync();
+        await _dbContext.Genres.AddAsync(genre);
+        await _dbContext.SaveChangesAsync();
     }
 
-    public async Task UpdateAsync(int id, GenreDto genre)
+    public async Task UpdateAsync(int id, GenreCreateDto genreDto)
     {
-        var entity = await _context.Genres.FindAsync(id);
+        var genre = await _dbContext.Genres.FindAsync(id);
 
-        if (entity is null) throw new Exception("Genre not found.");
+        if (genre is null) throw new Exception("Genre not found.");
 
-        entity.Name = genre.Name!;
+        genre.Name = genreDto.Name!;
 
-        await _context.SaveChangesAsync();
+        await _dbContext.SaveChangesAsync();
     }
 
     public async Task DeleteAsync(int id)
     {
-        await _context.Genres.Where(g => g.Id == id)
-            .ExecuteDeleteAsync();
+        var genre = await _dbContext.Genres.FindAsync(id);
+
+        if (genre is null) return;
+
+        _dbContext.Genres.Remove(genre);
+        await _dbContext.SaveChangesAsync();
     }
 }

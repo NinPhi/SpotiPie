@@ -7,30 +7,28 @@ namespace SpotiPie.Services;
 
 public class AlbumService : IAlbumService
 {
-    private readonly AppDbContext _appDbContext;
+    private readonly AppDbContext _dbContext;
+
     public AlbumService(AppDbContext dbContext)
     {
-        _appDbContext = dbContext;
+        _dbContext = dbContext;
     }
 
-    public async Task<AlbumGetDto> GetAlbumByIdAsync(int id)
+    public async Task<AlbumGetDto?> GetByIdAsync(int id)
     {
-        var album = await _appDbContext.Albums.Where(a => a.Id == id).FirstOrDefaultAsync();
+        var album = await _dbContext.Albums.FindAsync(id);
 
-        if (album is null)
-        {
-            throw new ArgumentNullException($"Album with id: {id} is not found");
-        }
+        if (album is null) return null;
 
-        var mappedAlbum = new AlbumGetDto
+        var albumDto = new AlbumGetDto
         {
             Id = album.Id,
+            ArtistId = album.ArtistId,
             Description = album.Description,
             Name = album.Name,
             ReleaseYear = album.ReleaseYear,
-            ArtistId = album.ArtistId,
         };
 
-        return mappedAlbum;
+        return albumDto;
     }
 }

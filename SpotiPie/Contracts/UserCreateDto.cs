@@ -1,0 +1,14 @@
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace SpotiPie.Contracts;
+
+public record UserCreateDto
+{
+    [Required(AllowEmptyStrings = false)]
+    [StringLength(200)]
+    public string? Login { get; init; }
+
+    [Required(AllowEmptyStrings = false)]
+    [StringLength(200)]
+    public string? Password { get; init; }
+}

@@ -20,7 +20,7 @@ public class TracksController : ControllerBase
     {
         try
         {
-            var tracks = await _trackService.GetAllTracksAsync();
+            var tracks = await _trackService.GetAllAsync();
             return Ok(tracks);
         }
         catch (Exception ex)
@@ -34,7 +34,7 @@ public class TracksController : ControllerBase
     {
         try
         {
-            var track = await _trackService.GetTrackByIdAsync(id);
+            var track = await _trackService.GetByIdAsync(id);
             return Ok(track);
         }
         catch (ArgumentException ex)
@@ -48,11 +48,11 @@ public class TracksController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create(CreateTrackDto dto)
+    public async Task<IActionResult> Create(TrackCreateDto dto)
     {
         try
         {
-            var createdTrack = await _trackService.CreateTrackAsync(dto);
+            var createdTrack = await _trackService.CreateAsync(dto);
             return NoContent();
         }
         catch (ArgumentException ex)
@@ -66,11 +66,11 @@ public class TracksController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> Update(int id, CreateTrackDto dto)
+    public async Task<IActionResult> Update(int id, TrackCreateDto dto)
     {
         try
         {
-            await _trackService.UpdateTrackAsync(id, dto);
+            await _trackService.UpdateAsync(id, dto);
             return NoContent();
         }
         catch (ArgumentException ex)
@@ -88,7 +88,7 @@ public class TracksController : ControllerBase
     {
         try
         {
-            await _trackService.DeleteTrackAsync(id);
+            await _trackService.DeleteAsync(id);
             return NoContent();
         }
         catch (ArgumentException ex)

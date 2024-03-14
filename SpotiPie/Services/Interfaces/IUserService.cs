@@ -1,10 +1,8 @@
 ﻿using SpotiPie.Contracts;
-using SpotiPie.Entities;
 
-namespace SpotiPie.Services.Interfaces
+namespace SpotiPie.Services.Interfaces;
+
+public interface IUserService
 {
-    public interface IUserService
-    {
-        Task<User> SignUpAsync(UserDto userDto);
-    }
+    public Task<UserGetDto> SignUpAsync(UserCreateDto userDto);
 }
