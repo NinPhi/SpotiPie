@@ -111,7 +111,7 @@ public class TrackService : ITrackService
 
         if (track is null) return;
 
-        _dbContext.Remove(track);
+        _dbContext.Tracks.Remove(track);
         await _dbContext.SaveChangesAsync();
     }
 }
