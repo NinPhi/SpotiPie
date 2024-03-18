@@ -114,4 +114,22 @@ public class TrackService : ITrackService
         _dbContext.Tracks.Remove(track);
         await _dbContext.SaveChangesAsync();
     }
+
+    public async Task<bool> AddGenreAsync(int id, int genreId)
+    {
+        var track = await _dbContext.Tracks
+            .Include(t => t.Genres)
+            .FirstOrDefaultAsync(t => t.Id == id);
+        if (track is null) return false;
+
+        var genre = await _dbContext.Genres.FindAsync(genreId);
+        if (genre is null) return false;
+
+        if (track.Genres.Contains(genre)) return true;
+
+        track.Genres.Add(genre);
+        await _dbContext.SaveChangesAsync();
+
+        return true;
+    }
 }

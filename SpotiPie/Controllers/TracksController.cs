@@ -60,4 +60,15 @@ public class TracksController : ControllerBase
 
         return NoContent();
     }
+
+    [HttpPatch("{id}/genre/{genreId}")]
+    public async Task<IActionResult> AddGenre(int id, int genreId)
+    {
+        var result = await _trackService.AddGenreAsync(id, genreId);
+
+        if (result is false)
+            return NotFound();
+
+        return NoContent();
+    }
 }

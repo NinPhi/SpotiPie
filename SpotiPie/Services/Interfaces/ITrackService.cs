@@ -9,4 +9,5 @@ public interface ITrackService
     public Task<TrackGetDto> CreateAsync(TrackCreateDto trackDto);
     public Task<TrackGetDto?> UpdateAsync(int id, TrackCreateDto trackDto);
     public Task DeleteAsync(int id);
+    public Task<bool> AddGenreAsync(int id, int genreId);
 }
