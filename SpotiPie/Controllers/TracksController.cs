@@ -34,6 +34,14 @@ public class TracksController : ControllerBase
         return Ok(trackDto);
     }
 
+    [HttpGet("by-artist/{artistId}")]
+    public async Task<IActionResult> GetByArtist(int artistId)
+    {
+        var trackDtos = await _trackService.GetByArtistAsync(artistId);
+
+        return Ok(trackDtos);
+    }
+
     [HttpPost]
     public async Task<IActionResult> Create(TrackCreateDto trackDto)
     {

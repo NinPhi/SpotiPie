@@ -3,6 +3,7 @@ using SpotiPie.Data;
 using SpotiPie.Entities;
 using SpotiPie.Entities.Contracts;
 using SpotiPie.Services.Interfaces;
+using System.Linq.Expressions;
 
 namespace SpotiPie.Services;
 
@@ -120,6 +121,7 @@ public class TrackService : ITrackService
         var track = await _dbContext.Tracks
             .Include(t => t.Genres)
             .FirstOrDefaultAsync(t => t.Id == id);
+
         if (track is null) return false;
 
         var genre = await _dbContext.Genres.FindAsync(genreId);
@@ -131,5 +133,24 @@ public class TrackService : ITrackService
         await _dbContext.SaveChangesAsync();
 
         return true;
+    }
+
+    public async Task<List<TrackGetDto>> GetByArtistAsync(int artistId)
+    {
+        var tracks = await _dbContext.Tracks
+            .AsNoTracking()
+            .Select(t => new TrackGetDto
+            {
+                Id = t.Id,
+                ArtistId = t.ArtistId,
+                AlbumId = t.AlbumId,
+                Name = t.Name,
+                Duration = t.Duration,
+                ReleaseDate = t.ReleaseDate,
+            })
+            .Where(t => t.ArtistId == artistId)
+            .ToListAsync();
+
+        return tracks;
     }
 }
