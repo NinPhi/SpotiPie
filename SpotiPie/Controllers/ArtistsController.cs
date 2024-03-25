@@ -49,4 +49,20 @@ public class ArtistsController : ControllerBase
 
         return NoContent();
     }
+
+    [HttpPut("{id}/new-follower")]
+    public async Task<IActionResult> AddFollower(int id)
+    {
+        var artistDto = await _artistService.GetByIdAsync(id);
+
+        if (artistDto is null)
+            return NotFound();
+
+        var result = await _artistService.AddFollowerAsync(id);
+
+        if (result is false)
+            return NotFound();
+
+        return NoContent();
+    }
 }
