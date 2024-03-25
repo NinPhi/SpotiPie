@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using SpotiPie.Contracts;
 using SpotiPie.Data;
 using SpotiPie.Entities;
 using SpotiPie.Entities.Contracts;
 using SpotiPie.Services.Interfaces;
-using System.Linq.Expressions;
 
 namespace SpotiPie.Services;
 
@@ -152,5 +152,48 @@ public class TrackService : ITrackService
             .ToListAsync();
 
         return tracks;
+    }
+
+    public async Task<bool> UploadDataAsync(TrackDataDto trackDataDto)
+    {
+        var track = await _dbContext.Tracks
+            .Include(t => t.TrackData)
+            .FirstOrDefaultAsync(t => t.Id == trackDataDto.TrackId);
+
+        if (track is null) return false;
+
+        var trackData = new TrackData()
+        {
+            TrackId = trackDataDto.TrackId,
+            Data = trackDataDto.Data,
+            FileName = trackDataDto.FileName,
+            MediaType = trackDataDto.MediaType,
+        };
+
+        track.TrackData = trackData;
+
+        await _dbContext.SaveChangesAsync();
+
+        return true;
+    }
+
+    public async Task<TrackDataDto?> DownloadDataAsync(int id)
+    {
+        var track = await _dbContext.Tracks
+            .AsNoTracking()
+            .Include(t => t.TrackData)
+            .FirstOrDefaultAsync(t => t.Id == id);
+
+        if (track?.TrackData is null) return null;
+
+        var trackDataDto = new TrackDataDto()
+        {
+            TrackId = id,
+            Data = track.TrackData.Data,
+            FileName = track.TrackData.FileName,
+            MediaType = track.TrackData.MediaType,
+        };
+
+        return trackDataDto;
     }
 }

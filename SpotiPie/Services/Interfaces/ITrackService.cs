@@ -1,4 +1,5 @@
-﻿using SpotiPie.Entities.Contracts;
+﻿using SpotiPie.Contracts;
+using SpotiPie.Entities.Contracts;
 
 namespace SpotiPie.Services.Interfaces;
 
@@ -11,4 +12,6 @@ public interface ITrackService
     public Task<TrackGetDto?> UpdateAsync(int id, TrackCreateDto trackDto);
     public Task DeleteAsync(int id);
     public Task<bool> AddGenreAsync(int id, int genreId);
+    public Task<bool> UploadDataAsync(TrackDataDto trackDataDto);
+    public Task<TrackDataDto?> DownloadDataAsync(int id);
 }

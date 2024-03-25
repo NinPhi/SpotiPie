@@ -18,6 +18,8 @@ public class Track
 
     public required DateTime ReleaseDate { get; set; }
 
+    public TrackData? TrackData { get; set; }
+
     public Artist? Artist { get; set; }
 
     public Album? Album { get; set; }
