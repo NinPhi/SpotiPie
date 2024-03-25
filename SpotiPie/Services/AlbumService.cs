@@ -1,4 +1,5 @@
-﻿using SpotiPie.Contracts;
+﻿using Mapster;
+using SpotiPie.Contracts;
 using SpotiPie.Data;
 using SpotiPie.Entities;
 using SpotiPie.Services.Interfaces;
@@ -20,39 +21,19 @@ public class AlbumService : IAlbumService
 
         if (album is null) return null;
 
-        var albumDto = new AlbumGetDto
-        {
-            Id = album.Id,
-            ArtistId = album.ArtistId,
-            Description = album.Description,
-            Name = album.Name,
-            ReleaseYear = album.ReleaseYear,
-        };
+        var albumDto = album.Adapt<AlbumGetDto>();
 
         return albumDto;
     }
 
     public async Task<AlbumGetDto> CreateAsync(AlbumCreateDto albumDto)
     {
-        var album = new Album
-        {
-            ArtistId = albumDto.ArtistId,
-            Name = albumDto.Name!,
-            Description = albumDto.Description,
-            ReleaseYear = albumDto.ReleaseYear,
-        };
+        var album = albumDto.Adapt<Album>();
 
         await _dbContext.Albums.AddAsync(album);
         await _dbContext.SaveChangesAsync();
 
-        var albumGetDto = new AlbumGetDto
-        {
-            Id = album.Id,
-            ArtistId = album.ArtistId,
-            Description = album.Description,
-            Name = album.Name,
-            ReleaseYear = album.ReleaseYear,
-        };
+        var albumGetDto = album.Adapt<AlbumGetDto>();
 
         return albumGetDto;
     }
