@@ -1,5 +1,9 @@
 using Microsoft.EntityFrameworkCore;
+using SpotiPie.Contracts;
 using SpotiPie.Data;
+using SpotiPie.Entities;
+using SpotiPie.Mappings;
+using SpotiPie.Middleware;
 using SpotiPie.Services;
 using SpotiPie.Services.Interfaces;
 using System.Text.Json.Serialization;
@@ -24,16 +28,29 @@ builder.Services.AddTransient<IAlbumService, AlbumService>();
 builder.Services.AddTransient<IGenreService, GenreService>();
 builder.Services.AddTransient<ITrackService, TrackService>();
 
+builder.Services.AddScoped<GlobalExceptionHandling>();
+
 builder.Services.AddDbContext<AppDbContext>(opts =>
     opts.UseSqlServer(builder.Configuration.GetConnectionString(nameof(AppDbContext))));
 
+builder.Services.AddAutoMapper(typeof(Program).Assembly);
+
 var app = builder.Build();
+
+app.UseMiddleware<GlobalExceptionHandling>();
 
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseStaticFiles();
+
+app.Use((HttpContext context, RequestDelegate next) =>
+{
+    return next(context);
+});
 
 app.UseHttpsRedirection();
 

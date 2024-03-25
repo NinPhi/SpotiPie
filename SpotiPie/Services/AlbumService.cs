@@ -37,7 +37,7 @@ public class AlbumService : IAlbumService
         var album = new Album
         {
             ArtistId = albumDto.ArtistId,
-            Name = albumDto.Name,
+            Name = albumDto.Name!,
             Description = albumDto.Description,
             ReleaseYear = albumDto.ReleaseYear,
         };

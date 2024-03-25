@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SpotiPie.Contracts;
 using SpotiPie.Entities.Contracts;
 using SpotiPie.Services.Interfaces;
 
@@ -34,6 +35,14 @@ public class TracksController : ControllerBase
         return Ok(trackDto);
     }
 
+    [HttpGet("by-artist/{artistId}")]
+    public async Task<IActionResult> GetByArtist(int artistId)
+    {
+        var trackDtos = await _trackService.GetByArtistAsync(artistId);
+
+        return Ok(trackDtos);
+    }
+
     [HttpPost]
     public async Task<IActionResult> Create(TrackCreateDto trackDto)
     {
@@ -59,5 +68,71 @@ public class TracksController : ControllerBase
         await _trackService.DeleteAsync(id);
 
         return NoContent();
+    }
+
+    [HttpPatch("{id}/genre/{genreId}")]
+    public async Task<IActionResult> AddGenre(int id, int genreId)
+    {
+        var result = await _trackService.AddGenreAsync(id, genreId);
+
+        if (result is false)
+            return NotFound();
+
+        return NoContent();
+    }
+
+    [HttpPost("{id}/data")]
+    public async Task<IActionResult> UploadFile(int id, IFormFile file)
+    {
+        var extensions = new string[]
+        {
+            ".mp3", ".mp4", ".wav", ".ogg",
+        };
+
+        var fileExtension = Path.GetExtension(file.FileName);
+
+        if (!extensions.Contains(fileExtension))
+            return BadRequest($"We only support these extensions: {string.Join(' ', extensions)}");
+
+        var mimeTypes = new string[]
+        {
+            "audio/mpeg", "audio/mp4", "audio/ogg", "audio/vnd.wav",
+        };
+
+        if (!mimeTypes.Contains(file.ContentType))
+            return BadRequest($"We only support these MIME types: {string.Join(' ', mimeTypes)}");
+
+        using var stream = new MemoryStream();
+        await file.CopyToAsync(stream);
+        byte[] data = stream.ToArray();
+
+        if (data.Length > 1024 * 1024 * 10)
+            return BadRequest("File size is too big, 10Mb is maximum.");
+
+        var dto = new TrackDataDto()
+        {
+            TrackId = id,
+            Data = data,
+            FileName = file.FileName,
+            MimeType = file.ContentType,
+        };
+
+        var result = await _trackService.UploadDataAsync(dto);
+
+        if (result is false)
+            return NotFound();
+
+        return NoContent();
+    }
+
+    [HttpGet("{id}/data")]
+    public async Task<IActionResult> DownloadFile(int id)
+    {
+        var dto = await _trackService.DownloadDataAsync(id);
+
+        if (dto is null)
+            return NotFound();
+
+        return File(dto.Data, dto.MimeType, dto.FileName);
     }
 }
