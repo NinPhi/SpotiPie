@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Mapster;
+using Microsoft.EntityFrameworkCore;
 using SpotiPie.Contracts;
 using SpotiPie.Data;
 using SpotiPie.Entities;
@@ -10,10 +12,12 @@ namespace SpotiPie.Services;
 public class TrackService : ITrackService
 {
     private readonly AppDbContext _dbContext;
+    private readonly IMapper _mapper;
 
-    public TrackService(AppDbContext dbContext)
+    public TrackService(AppDbContext dbContext, IMapper mapper)
     {
         _dbContext = dbContext;
+        _mapper = mapper;
     }
 
     public async Task<List<TrackGetDto>> GetAllAsync()
@@ -26,7 +30,7 @@ public class TrackService : ITrackService
             ArtistId = t.ArtistId,
             AlbumId = t.AlbumId,
             Name = t.Name,
-            Duration = t.Duration,
+            TrackDuration = t.Duration,
             ReleaseDate = t.ReleaseDate,
 
         }).ToList();
@@ -46,7 +50,7 @@ public class TrackService : ITrackService
             ArtistId = track.ArtistId,
             AlbumId = track.AlbumId,
             Name = track.Name,
-            Duration = track.Duration,
+            TrackDuration = track.Duration,
             ReleaseDate = track.ReleaseDate,
         };
 
@@ -55,27 +59,17 @@ public class TrackService : ITrackService
 
     public async Task<TrackGetDto> CreateAsync(TrackCreateDto dto)
     {
-        var track = new Track
-        {
-            ArtistId = dto.ArtistId,
-            AlbumId = dto.AlbumId,
-            Name = dto.Name!,
-            Duration = dto.Duration!,
-            ReleaseDate = dto.ReleaseDate,
-        };
+        var config = TypeAdapterConfig<Track, TrackGetDto>
+            .NewConfig()
+            .Map(dest => dest.TrackDuration, src => src.Duration)
+            .Config;
+
+        var track = dto.Adapt<Track>();
 
         await _dbContext.AddAsync(track);
         await _dbContext.SaveChangesAsync();
 
-        var trackDto = new TrackGetDto
-        {
-            Id = track.Id,
-            ArtistId = track.ArtistId,
-            AlbumId = track.AlbumId,
-            Name = track.Name,
-            Duration = track.Duration,
-            ReleaseDate = track.ReleaseDate
-        };
+        var trackDto = track.Adapt<TrackGetDto>(config);
 
         return trackDto;
     }
@@ -99,7 +93,7 @@ public class TrackService : ITrackService
             ArtistId = track.ArtistId,
             AlbumId = track.AlbumId,
             Name = track.Name,
-            Duration = track.Duration,
+            TrackDuration = track.Duration,
             ReleaseDate = track.ReleaseDate,
         };
 
@@ -145,7 +139,7 @@ public class TrackService : ITrackService
                 ArtistId = t.ArtistId,
                 AlbumId = t.AlbumId,
                 Name = t.Name,
-                Duration = t.Duration,
+                TrackDuration = t.Duration,
                 ReleaseDate = t.ReleaseDate,
             })
             .Where(t => t.ArtistId == artistId)
@@ -162,13 +156,7 @@ public class TrackService : ITrackService
 
         if (track is null) return false;
 
-        var trackData = new TrackData()
-        {
-            TrackId = trackDataDto.TrackId,
-            Data = trackDataDto.Data,
-            FileName = trackDataDto.FileName,
-            MediaType = trackDataDto.MediaType,
-        };
+        var trackData = _mapper.Map<TrackData>(trackDataDto);
 
         track.TrackData = trackData;
 
@@ -186,13 +174,7 @@ public class TrackService : ITrackService
 
         if (track?.TrackData is null) return null;
 
-        var trackDataDto = new TrackDataDto()
-        {
-            TrackId = id,
-            Data = track.TrackData.Data,
-            FileName = track.TrackData.FileName,
-            MediaType = track.TrackData.MediaType,
-        };
+        var trackDataDto = _mapper.Map<TrackDataDto>(track.TrackData);
 
         return trackDataDto;
     }

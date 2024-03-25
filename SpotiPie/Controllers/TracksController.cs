@@ -114,7 +114,7 @@ public class TracksController : ControllerBase
             TrackId = id,
             Data = data,
             FileName = file.FileName,
-            MediaType = file.ContentType,
+            MimeType = file.ContentType,
         };
 
         var result = await _trackService.UploadDataAsync(dto);
@@ -133,6 +133,6 @@ public class TracksController : ControllerBase
         if (dto is null)
             return NotFound();
 
-        return File(dto.Data, dto.MediaType, dto.FileName);
+        return File(dto.Data, dto.MimeType, dto.FileName);
     }
 }

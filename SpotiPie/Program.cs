@@ -1,5 +1,8 @@
 using Microsoft.EntityFrameworkCore;
+using SpotiPie.Contracts;
 using SpotiPie.Data;
+using SpotiPie.Entities;
+using SpotiPie.Mappings;
 using SpotiPie.Middleware;
 using SpotiPie.Services;
 using SpotiPie.Services.Interfaces;
@@ -29,6 +32,8 @@ builder.Services.AddScoped<GlobalExceptionHandling>();
 
 builder.Services.AddDbContext<AppDbContext>(opts =>
     opts.UseSqlServer(builder.Configuration.GetConnectionString(nameof(AppDbContext))));
+
+builder.Services.AddAutoMapper(typeof(Program).Assembly);
 
 var app = builder.Build();
 

@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using SpotiPie.Contracts;
 using SpotiPie.Data;
 using SpotiPie.Entities;
@@ -9,10 +10,12 @@ namespace SpotiPie.Services;
 public class ArtistService : IArtistService
 {
     private readonly AppDbContext _dbContext;
+    private readonly IMapper _mapper;
 
-    public ArtistService(AppDbContext dbContext)
+    public ArtistService(AppDbContext dbContext, IMapper mapper)
     {
         _dbContext = dbContext;
+        _mapper = mapper;
     }
 
     public async Task<ArtistGetDto?> GetByIdAsync(int id)
@@ -24,13 +27,7 @@ public class ArtistService : IArtistService
 
         if (artist is null) return null;
 
-        var artistDto = new ArtistGetDto
-        {
-            Id = artist.Id,
-            Pseudonym = artist.Pseudonym,
-            MonthlyListeners = artist.MonthlyListeners,
-            Followers = artist.Followers,
-        };
+        var artistDto = _mapper.Map<ArtistGetDto>(artist);
 
         return artistDto;
     }
@@ -42,24 +39,23 @@ public class ArtistService : IArtistService
             .AsNoTracking()
             .ToListAsync();
 
-        var artistDtos = artists.Select(a => new ArtistGetDto
-        {
-            Id = a.Id,
-            Pseudonym = a.Pseudonym,
-            MonthlyListeners = a.MonthlyListeners,
-            Followers = a.Followers,
+        //var artistDtos = artists.Select(a => new ArtistGetDto
+        //{
+        //    Id = a.Id,
+        //    Pseudonym = a.Pseudonym,
+        //    MonthlyListeners = a.MonthlyListeners,
+        //    Followers = a.Followers,
 
-        }).ToList();
+        //}).ToList();
+
+        var artistDtos = _mapper.Map<List<ArtistGetDto>>(artists);
 
         return artistDtos;
     }
 
     public async Task CreateAsync(ArtistCreateDto artistDto)
     {
-        var artist = new Artist()
-        {
-            Pseudonym = artistDto.Pseudonym!,
-        };
+        var artist = _mapper.Map<Artist>(artistDto);
 
         await _dbContext.Artists.AddAsync(artist);
 
