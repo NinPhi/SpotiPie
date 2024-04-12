@@ -30,17 +30,7 @@ public class UsersController : ControllerBase
         if (user == null)
             return Unauthorized();
 
-        var claims = new Claim[]
-        {
-            new(ClaimTypes.NameIdentifier, user.Id.ToString()),
-            new(ClaimTypes.Name, user.Login),
-            new(ClaimTypes.Role, user.Roles),
-        };
-
-        var identity = new ClaimsIdentity(claims, "cookie");
-        var principal = new ClaimsPrincipal(identity);
-
-        await HttpContext.SignInAsync(principal);
+        await _userService.SignInAsync(user);
 
         return NoContent();
     }

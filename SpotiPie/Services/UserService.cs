@@ -6,11 +6,14 @@ namespace SpotiPie.Services;
 public class UserService : IUserService
 {
     private readonly AppDbContext _dbContext;
+    private readonly IPasswordManager _passwordManager;
     private readonly HttpContext _httpContext;
 
-    public UserService(AppDbContext dbContext, IHttpContextAccessor accessor)
+    public UserService(AppDbContext dbContext, IPasswordManager passwordManager, IHttpContextAccessor accessor)
     {
         _dbContext = dbContext;
+
+        _passwordManager = passwordManager;
 
         if (accessor.HttpContext is null)
         {
@@ -25,7 +28,7 @@ public class UserService : IUserService
         var user = new User()
         {
             Login = userDto.Login!,
-            Password = userDto.Password!,
+            PasswordHash = _passwordManager.HashPassword(userDto.Password!),
             Roles = "User"
         };
 
@@ -44,6 +47,11 @@ public class UserService : IUserService
         return userGetDto;
     }
 
+    public Task SignInAsync(UserGetDto userGetDto)
+    {
+        return SignInWithHttpContext(userGetDto);
+    }
+
     public async Task<UserGetDto?> GetByLoginAsync(UserCredentialsDto userCredentialsDto)
     {
         var user = await _dbContext.Users
@@ -51,6 +59,9 @@ public class UserService : IUserService
             .FirstOrDefaultAsync(u => u.Login == userCredentialsDto.Login);
 
         if (user is null) return null;
+
+        if (!_passwordManager.VerifyPassword(userCredentialsDto.Password!, user.PasswordHash))
+            return null;
 
         var userDto = user.Adapt<UserGetDto>();
 

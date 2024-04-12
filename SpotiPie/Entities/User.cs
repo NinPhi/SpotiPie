@@ -10,7 +10,7 @@ public class User
     public required string Login { get; set; }
 
     [StringLength(200)]
-    public required string Password { get; set; }
+    public required string PasswordHash { get; set; }
 
     [StringLength(300)]
     public string Roles { get; set; } = "User";
