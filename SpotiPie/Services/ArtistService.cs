@@ -1,11 +1,4 @@
-﻿using AutoMapper;
-using Microsoft.EntityFrameworkCore;
-using SpotiPie.Contracts;
-using SpotiPie.Data;
-using SpotiPie.Entities;
-using SpotiPie.Services.Interfaces;
-
-namespace SpotiPie.Services;
+﻿namespace SpotiPie.Services;
 
 public class ArtistService : IArtistService
 {

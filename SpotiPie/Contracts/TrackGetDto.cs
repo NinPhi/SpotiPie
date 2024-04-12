@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace SpotiPie.Entities.Contracts;
+﻿namespace SpotiPie.Entities.Contracts;
 
 public record TrackGetDto
 {

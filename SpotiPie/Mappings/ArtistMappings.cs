@@ -1,8 +1,4 @@
-﻿using AutoMapper;
-using SpotiPie.Contracts;
-using SpotiPie.Entities;
-
-namespace SpotiPie.Mappings;
+﻿namespace SpotiPie.Mappings;
 
 public class ArtistMappings : Profile
 {

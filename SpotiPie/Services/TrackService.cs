@@ -1,11 +1,4 @@
-﻿using AutoMapper;
-using Mapster;
-using Microsoft.EntityFrameworkCore;
-using SpotiPie.Contracts;
-using SpotiPie.Data;
-using SpotiPie.Entities;
-using SpotiPie.Entities.Contracts;
-using SpotiPie.Services.Interfaces;
+﻿using SpotiPie.Entities.Contracts;
 
 namespace SpotiPie.Services;
 

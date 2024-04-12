@@ -1,6 +1,4 @@
-﻿using SpotiPie.Contracts;
-
-namespace SpotiPie.Services.Interfaces;
+﻿namespace SpotiPie.Services.Interfaces;
 
 public interface ILyricsService
 {

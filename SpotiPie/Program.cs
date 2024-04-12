@@ -1,11 +1,5 @@
-using Microsoft.EntityFrameworkCore;
-using SpotiPie.Contracts;
-using SpotiPie.Data;
-using SpotiPie.Entities;
-using SpotiPie.Mappings;
 using SpotiPie.Middleware;
 using SpotiPie.Services;
-using SpotiPie.Services.Interfaces;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);

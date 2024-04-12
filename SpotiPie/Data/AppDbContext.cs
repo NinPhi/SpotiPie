@@ -1,7 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using SpotiPie.Entities;
-
-namespace SpotiPie.Data;
+﻿namespace SpotiPie.Data;
 
 public class AppDbContext : DbContext
 {

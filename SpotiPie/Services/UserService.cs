@@ -1,8 +1,4 @@
 ﻿using Microsoft.AspNetCore.Authentication;
-using SpotiPie.Contracts;
-using SpotiPie.Data;
-using SpotiPie.Entities;
-using SpotiPie.Services.Interfaces;
 using System.Security.Claims;
 
 namespace SpotiPie.Services;
@@ -24,7 +20,7 @@ public class UserService : IUserService
         _httpContext = accessor.HttpContext;
     }
 
-    public async Task<UserGetDto> SignUpAsync(UserCreateDto userDto)
+    public async Task<UserGetDto> SignUpAsync(UserCredentialsDto userDto)
     {
         var user = new User()
         {
@@ -46,6 +42,19 @@ public class UserService : IUserService
         await SignInWithHttpContext(userGetDto);
 
         return userGetDto;
+    }
+
+    public async Task<UserGetDto?> GetByLoginAsync(UserCredentialsDto userCredentialsDto)
+    {
+        var user = await _dbContext.Users
+            .AsNoTracking()
+            .FirstOrDefaultAsync(u => u.Login == userCredentialsDto.Login);
+
+        if (user is null) return null;
+
+        var userDto = user.Adapt<UserGetDto>();
+
+        return userDto;
     }
 
     private Task SignInWithHttpContext(UserGetDto userDto)

@@ -2,7 +2,7 @@
 
 namespace SpotiPie.Contracts;
 
-public record UserCreateDto
+public record UserCredentialsDto
 {
     [Required(AllowEmptyStrings = false)]
     [StringLength(200, MinimumLength = 4)]

@@ -1,9 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using SpotiPie.Contracts;
-using SpotiPie.Entities;
-using SpotiPie.Services.Interfaces;
-
-namespace SpotiPie.Controllers;
+﻿namespace SpotiPie.Controllers;
 
 [ApiController]
 [Route("api/genres")]
