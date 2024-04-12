@@ -29,7 +29,7 @@ public class UserService : IUserService
         {
             Login = userDto.Login!,
             PasswordHash = _passwordManager.HashPassword(userDto.Password!),
-            Roles = "User"
+            Role = "User"
         };
 
         await _dbContext.Users.AddAsync(user);
@@ -39,7 +39,7 @@ public class UserService : IUserService
         {
             Id = user.Id,
             Login = user.Login,
-            Roles = user.Roles,
+            Roles = user.Role,
         };
 
         await SignInWithHttpContext(userGetDto);

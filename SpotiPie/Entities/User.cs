@@ -13,5 +13,5 @@ public class User
     public required string PasswordHash { get; set; }
 
     [StringLength(300)]
-    public string Roles { get; set; } = "User";
+    public required string Role { get; set; }
 }

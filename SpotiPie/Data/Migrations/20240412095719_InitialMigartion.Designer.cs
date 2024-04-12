@@ -9,18 +9,18 @@ using SpotiPie.Data;
 
 #nullable disable
 
-namespace SpotiPie.Data.Migrations
+namespace SpotiPie.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240320132509_TrackData_AddTable")]
-    partial class TrackData_AddTable
+    [Migration("20240412095719_InitialMigartion")]
+    partial class InitialMigartion
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.16")
+                .HasAnnotation("ProductVersion", "8.0.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -212,12 +212,12 @@ namespace SpotiPie.Data.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
-                    b.Property<string>("Password")
+                    b.Property<string>("PasswordHash")
                         .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
-                    b.Property<string>("Roles")
+                    b.Property<string>("Role")
                         .IsRequired()
                         .HasMaxLength(300)
                         .HasColumnType("nvarchar(300)");
