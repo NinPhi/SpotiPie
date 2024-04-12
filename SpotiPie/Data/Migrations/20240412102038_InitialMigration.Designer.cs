@@ -12,8 +12,8 @@ using SpotiPie.Data;
 namespace SpotiPie.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240412095719_InitialMigartion")]
-    partial class InitialMigartion
+    [Migration("20240412102038_InitialMigration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

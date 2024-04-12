@@ -1,7 +1,10 @@
-﻿namespace SpotiPie.Controllers;
+﻿using Microsoft.AspNetCore.Authorization;
 
-[Route("api/users")]
+namespace SpotiPie.Controllers;
+
+[AllowAnonymous]
 [ApiController]
+[Route("api/users")]
 public class UsersController : ControllerBase
 {
     private readonly IUserService _userService;

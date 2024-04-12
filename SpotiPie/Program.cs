@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
 using SpotiPie.Middleware;
 using SpotiPie.Services;
+using System.Net;
 using System.Text;
 using System.Text.Json.Serialization;
 
@@ -18,6 +20,7 @@ builder.Services.AddHttpContextAccessor();
 
 var securityKey = Encoding.UTF8.GetBytes(builder.Configuration["JWT:SecurityKey"]!);
 
+// Настройка JWT аутентификации
 builder.Services.AddAuthentication(opts =>
 {
     opts.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -36,6 +39,13 @@ builder.Services.AddAuthentication(opts =>
         RequireExpirationTime = true,
     };
 });
+
+// Настройка дефолтной авторизации
+builder.Services
+    .AddAuthorizationBuilder()
+    .SetFallbackPolicy(new AuthorizationPolicyBuilder()
+        .RequireAuthenticatedUser()
+        .Build());
 
 builder.Services.AddSingleton<IPasswordManager, PasswordManager>();
 builder.Services.AddTransient<IAuthService, AuthService>();
