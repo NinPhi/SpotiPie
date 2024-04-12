@@ -1,5 +1,8 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 using SpotiPie.Middleware;
 using SpotiPie.Services;
+using System.Text;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,12 +16,33 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddHttpContextAccessor();
 
-builder.Services.AddAuthentication().AddCookie("cookie");
+var securityKey = Encoding.UTF8.GetBytes(builder.Configuration["JWT:SecurityKey"]!);
+
+builder.Services.AddAuthentication(opts =>
+{
+    opts.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+    opts.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    opts.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, opts =>
+{
+    opts.MapInboundClaims = false;
+    opts.SaveToken = false;
+    opts.TokenValidationParameters = new()
+    {
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(securityKey),
+        ValidateAudience = false,
+        ValidateIssuer = false,
+        RequireExpirationTime = true,
+    };
+});
 
 builder.Services.AddSingleton<IPasswordManager, PasswordManager>();
+builder.Services.AddTransient<IAuthService, AuthService>();
+builder.Services.AddTransient<IUserService, UserService>();
+
 builder.Services.AddTransient<IArtistService, ArtistService>();
 builder.Services.AddTransient<ILyricsService, LyricsService>();
-builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<IAlbumService, AlbumService>();
 builder.Services.AddTransient<IGenreService, GenreService>();
 builder.Services.AddTransient<ITrackService, TrackService>();

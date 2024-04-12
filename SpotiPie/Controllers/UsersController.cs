@@ -1,17 +1,16 @@
-﻿using Microsoft.AspNetCore.Authentication;
-using System.Security.Claims;
-
-namespace SpotiPie.Controllers;
+﻿namespace SpotiPie.Controllers;
 
 [Route("api/users")]
 [ApiController]
 public class UsersController : ControllerBase
 {
     private readonly IUserService _userService;
+    private readonly IAuthService _authService;
 
-    public UsersController(IUserService userService)
+    public UsersController(IUserService userService, IAuthService authService)
     {
         _userService = userService;
+        _authService = authService;
     }
 
     [HttpPost("sign-up")]
@@ -30,19 +29,12 @@ public class UsersController : ControllerBase
         if (user == null)
             return Unauthorized();
 
-        await _userService.SignInAsync(user);
+        var identity = _authService.CreateClaimsIdentity(user);
+        var token = _authService.GenerateJwt(identity);
 
-        return NoContent();
-    }
-
-    [HttpPost("sign-out")]
-    public async Task<ActionResult> Logout()
-    {
-        if (HttpContext.User.Identity == null)
-            return NoContent();
-
-        await HttpContext.SignOutAsync();
-
-        return NoContent();
+        return Ok(new
+        {
+            Bearer = token,
+        });
     }
 }
