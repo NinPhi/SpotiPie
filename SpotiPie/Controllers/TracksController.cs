@@ -1,6 +1,4 @@
-﻿using SpotiPie.Entities.Contracts;
-
-namespace SpotiPie.Controllers;
+﻿namespace SpotiPie.Controllers;
 
 [Route("api/tracks")]
 [ApiController]
