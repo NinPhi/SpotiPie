@@ -1,9 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using SpotiPie.Contracts;
-using SpotiPie.Entities.Contracts;
-using SpotiPie.Services.Interfaces;
-
-namespace SpotiPie.Controllers;
+﻿namespace SpotiPie.Controllers;
 
 [Route("api/tracks")]
 [ApiController]
