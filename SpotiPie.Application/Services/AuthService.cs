@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -6,14 +7,9 @@ using System.Text;
 
 namespace SpotiPie.Application.Services;
 
-public class AuthService : IAuthService
+public class AuthService(IConfiguration configuration) : IAuthService
 {
-    private readonly IConfiguration _configuration;
-
-    public AuthService(IConfiguration configuration)
-    {
-        _configuration = configuration;
-    }
+    private readonly IConfiguration _configuration = configuration;
 
     public ClaimsIdentity CreateClaimsIdentity(UserGetDto user)
     {
