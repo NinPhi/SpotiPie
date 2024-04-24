@@ -3,10 +3,7 @@ using SpotiPie.Domain.Repositories;
 
 namespace SpotiPie.Application.Services;
 
-public class GenreService(
-    IGenreRespository genreRespository,
-    IUnitOfWork unitOfWork)
-    : IGenreService
+public class GenreService(IGenreRespository genreRespository, IUnitOfWork unitOfWork) : IGenreService
 {
     public async Task<List<GenreGetDto>> GetAllAsync()
     {
@@ -16,7 +13,6 @@ public class GenreService(
         {
             Id = g.Id,
             Name = g.Name,
-
         }).ToList();
 
         return genreDtos;

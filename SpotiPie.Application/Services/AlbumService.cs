@@ -1,17 +1,16 @@
-﻿namespace SpotiPie.Application.Services;
+﻿using SpotiPie.Application.Services.Interfaces.UnitOfWork;
+using SpotiPie.Domain.Repositories;
 
-public class AlbumService : IAlbumService
+namespace SpotiPie.Application.Services;
+
+public class AlbumService(IAlbumRepository albumRepository, IUnitOfWork unitOfWork) : IAlbumService
 {
-    private readonly AppDbContext _dbContext;
-
-    public AlbumService(AppDbContext dbContext)
-    {
-        _dbContext = dbContext;
-    }
+    private readonly IAlbumRepository _albumRepository = albumRepository;
+    private readonly IUnitOfWork _unitOfWork = unitOfWork;
 
     public async Task<AlbumGetDto?> GetByIdAsync(int id)
     {
-        var album = await _dbContext.Albums.FindAsync(id);
+        var album = await _albumRepository.GetByIdAsync(id);
 
         if (album is null) return null;
 
@@ -37,8 +36,8 @@ public class AlbumService : IAlbumService
             ReleaseYear = albumDto.ReleaseYear,
         };
 
-        await _dbContext.Albums.AddAsync(album);
-        await _dbContext.SaveChangesAsync();
+        _albumRepository.Add(album);
+        await _unitOfWork.SaveChangesAsync();
 
         var albumGetDto = new AlbumGetDto
         {

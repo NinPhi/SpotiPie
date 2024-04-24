@@ -1,21 +1,20 @@
 ﻿using SpotiPie.Application.Contracts;
+using SpotiPie.Application.Services.Interfaces.UnitOfWork;
+using SpotiPie.Domain.Repositories;
+using SpotiPie.Entities.Contracts;
 
 namespace SpotiPie.Application.Services;
 
-public class TrackService : ITrackService
+public class TrackService(ITrackRepository trackRepository, IMapper mapper, IUnitOfWork unitOfWork, IGenreRespository genreRepository) : ITrackService
 {
-    private readonly AppDbContext _dbContext;
-    private readonly IMapper _mapper;
-
-    public TrackService(AppDbContext dbContext, IMapper mapper)
-    {
-        _dbContext = dbContext;
-        _mapper = mapper;
-    }
+    private readonly ITrackRepository _trackRepository = trackRepository;
+    private readonly IMapper _mapper = mapper;
+    private readonly IUnitOfWork _unitOfWork = unitOfWork;
+    private readonly IGenreRespository _genreRepository = genreRepository;
 
     public async Task<List<TrackGetDto>> GetAllAsync()
     {
-        var tracks = await _dbContext.Tracks.ToListAsync();
+        var tracks = await _trackRepository.GetAllAsync();
 
         var trackDtos = tracks.Select(t => new TrackGetDto
         {
@@ -33,7 +32,7 @@ public class TrackService : ITrackService
 
     public async Task<TrackGetDto?> GetByIdAsync(int id)
     {
-        var track = await _dbContext.Tracks.FindAsync(id);
+        var track = await _trackRepository.GetByIdAsync(id);
 
         if (track is null) return null;
 
@@ -59,8 +58,8 @@ public class TrackService : ITrackService
 
         var track = dto.Adapt<Track>();
 
-        await _dbContext.AddAsync(track);
-        await _dbContext.SaveChangesAsync();
+        _trackRepository.Add(track);   
+        await _unitOfWork.SaveChangesAsync();
 
         var trackDto = track.Adapt<TrackGetDto>(config);
 
@@ -69,7 +68,7 @@ public class TrackService : ITrackService
 
     public async Task<TrackGetDto?> UpdateAsync(int id, TrackCreateDto trackDto)
     {
-        var track = await _dbContext.Tracks.FindAsync(id);
+        var track = await _trackRepository.GetByIdAsync(id);
 
         if (track is null) return null;
 
@@ -77,8 +76,8 @@ public class TrackService : ITrackService
         track.Duration = trackDto.Duration!;
         track.ReleaseDate = trackDto.ReleaseDate;
 
-        _dbContext.Update(track);
-        await _dbContext.SaveChangesAsync();
+        _trackRepository.Update(track);
+        await _unitOfWork.SaveChangesAsync();
 
         var trackGetDto = new TrackGetDto
         {
@@ -95,57 +94,41 @@ public class TrackService : ITrackService
 
     public async Task DeleteAsync(int id)
     {
-        var track = await _dbContext.Tracks.FindAsync(id);
+        var track = await _trackRepository.GetByIdAsync(id);
 
         if (track is null) return;
 
-        _dbContext.Tracks.Remove(track);
-        await _dbContext.SaveChangesAsync();
+        _trackRepository.Remove(track);
+        await _unitOfWork.SaveChangesAsync();
     }
 
     public async Task<bool> AddGenreAsync(int id, int genreId)
     {
-        var track = await _dbContext.Tracks
-            .Include(t => t.Genres)
-            .FirstOrDefaultAsync(t => t.Id == id);
+        var track = await _trackRepository.GetTrackWithGenre(id);
 
         if (track is null) return false;
 
-        var genre = await _dbContext.Genres.FindAsync(genreId);
+        var genre = await _genreRepository.GetByIdAsync(genreId);
         if (genre is null) return false;
 
         if (track.Genres.Contains(genre)) return true;
 
         track.Genres.Add(genre);
-        await _dbContext.SaveChangesAsync();
+        await _unitOfWork.SaveChangesAsync();
 
         return true;
     }
 
     public async Task<List<TrackGetDto>> GetByArtistAsync(int artistId)
     {
-        var tracks = await _dbContext.Tracks
-            .AsNoTracking()
-            .Select(t => new TrackGetDto
-            {
-                Id = t.Id,
-                ArtistId = t.ArtistId,
-                AlbumId = t.AlbumId,
-                Name = t.Name,
-                TrackDuration = t.Duration,
-                ReleaseDate = t.ReleaseDate,
-            })
-            .Where(t => t.ArtistId == artistId)
-            .ToListAsync();
+        var tracks = await _trackRepository.GetTracksByArtistAsync(artistId);
 
-        return tracks;
+        return _mapper.Map<List<TrackGetDto>>(tracks);
     }
 
     public async Task<bool> UploadDataAsync(TrackDataDto trackDataDto)
     {
-        var track = await _dbContext.Tracks
-            .Include(t => t.TrackData)
-            .FirstOrDefaultAsync(t => t.Id == trackDataDto.TrackId);
+        var track = await _trackRepository.GetByIdAsync(trackDataDto.TrackId);
 
         if (track is null) return false;
 
@@ -153,17 +136,14 @@ public class TrackService : ITrackService
 
         track.TrackData = trackData;
 
-        await _dbContext.SaveChangesAsync();
+        await _unitOfWork.SaveChangesAsync();
 
         return true;
     }
 
     public async Task<TrackDataDto?> DownloadDataAsync(int id)
     {
-        var track = await _dbContext.Tracks
-            .AsNoTracking()
-            .Include(t => t.TrackData)
-            .FirstOrDefaultAsync(t => t.Id == id);
+        var track = await _trackRepository.GetTrackDataAsync(id);
 
         if (track?.TrackData is null) return null;
 

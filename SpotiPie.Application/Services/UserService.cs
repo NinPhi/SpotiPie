@@ -1,15 +1,13 @@
-﻿namespace SpotiPie.Application.Services;
+﻿using SpotiPie.Application.Services.Interfaces.UnitOfWork;
+using SpotiPie.Domain.Repositories;
 
-public class UserService : IUserService
+namespace SpotiPie.Application.Services;
+
+public class UserService(IUserRepository userRepository, IPasswordManager passwordManager, IUnitOfWork unitOfWork) : IUserService
 {
-    private readonly AppDbContext _dbContext;
-    private readonly IPasswordManager _passwordManager;
-
-    public UserService(AppDbContext dbContext, IPasswordManager passwordManager)
-    {
-        _dbContext = dbContext;
-        _passwordManager = passwordManager;
-    }
+    private readonly IUserRepository _userRepository = userRepository;
+    private readonly IPasswordManager _passwordManager = passwordManager;
+    private readonly IUnitOfWork _unitOfWork = unitOfWork;
 
     public async Task<UserGetDto> SignUpAsync(UserCredentialsDto userDto)
     {
@@ -20,8 +18,8 @@ public class UserService : IUserService
             Role = "User"
         };
 
-        await _dbContext.Users.AddAsync(user);
-        await _dbContext.SaveChangesAsync();
+        _userRepository.Add(user);
+        await _unitOfWork.SaveChangesAsync();
 
         var userGetDto = new UserGetDto
         {
@@ -35,9 +33,7 @@ public class UserService : IUserService
 
     public async Task<UserGetDto?> GetByLoginAsync(UserCredentialsDto userCredentialsDto)
     {
-        var user = await _dbContext.Users
-            .AsNoTracking()
-            .FirstOrDefaultAsync(u => u.Login == userCredentialsDto.Login);
+        var user = await _userRepository.GetUserByLoginAsync(userCredentialsDto.Login!);
 
         if (user is null) return null;
 

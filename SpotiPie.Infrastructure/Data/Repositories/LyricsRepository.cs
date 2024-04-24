@@ -3,4 +3,4 @@ using SpotiPie.Infrastructure.Data.Repositories.Abstractions;
 
 namespace SpotiPie.Infrastructure.Data.Repositories;
 
-public class GenreRepository(AppDbContext dbContext) : BaseRepository<Genre>(dbContext), IGenreRespository;
+public class LyricsRepository(AppDbContext dbContext) : BaseRepository<Lyrics>(dbContext), ILyricsRepository;

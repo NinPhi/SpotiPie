@@ -1,4 +1,5 @@
 ﻿using SpotiPie.Application.Contracts;
+using SpotiPie.Entities.Contracts;
 
 namespace SpotiPie.Application.Services.Interfaces;
 
