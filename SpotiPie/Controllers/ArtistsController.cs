@@ -2,19 +2,12 @@
 
 [ApiController]
 [Route("api/artists")]
-public class ArtistsController : ControllerBase
+public class ArtistsController(IArtistService artistService) : ControllerBase
 {
-    private readonly IArtistService _artistService;
-
-    public ArtistsController(IArtistService artistService)
-    {
-        _artistService = artistService;
-    }
-
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
-        var artistDtos = await _artistService.GetAllAsync();
+        var artistDtos = await artistService.GetAllAsync();
 
         return Ok(artistDtos);
     }
@@ -22,7 +15,7 @@ public class ArtistsController : ControllerBase
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById(int id)
     {
-        var artistDto = await _artistService.GetByIdAsync(id);
+        var artistDto = await artistService.GetByIdAsync(id);
 
         if (artistDto is null)
             return NotFound();
@@ -33,7 +26,7 @@ public class ArtistsController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Create(ArtistCreateDto artistDto)
     {
-        await _artistService.CreateAsync(artistDto);
+        await artistService.CreateAsync(artistDto);
 
         return NoContent();
     }
@@ -41,7 +34,7 @@ public class ArtistsController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {
-        await _artistService.DeleteAsync(id);
+        await artistService.DeleteAsync(id);
 
         return NoContent();
     }
@@ -49,12 +42,12 @@ public class ArtistsController : ControllerBase
     [HttpPut("{id}/new-follower")]
     public async Task<IActionResult> AddFollower(int id)
     {
-        var artistDto = await _artistService.GetByIdAsync(id);
+        var artistDto = await artistService.GetByIdAsync(id);
 
         if (artistDto is null)
             return NotFound();
 
-        var result = await _artistService.AddFollowerAsync(id);
+        var result = await artistService.AddFollowerAsync(id);
 
         if (result is false)
             return NotFound();

@@ -1,17 +1,14 @@
-﻿namespace SpotiPie.Application.Services;
+﻿using SpotiPie.Application.Services.Interfaces.UnitOfWork;
+using SpotiPie.Domain.Repositories;
 
-public class LyricsService : ILyricsService
+namespace SpotiPie.Application.Services;
+
+public class LyricsService(
+    ILyricsRepository lyricsRepository, IUnitOfWork unitOfWork) : ILyricsService
 {
-    private readonly AppDbContext _dbContext;
-
-    public LyricsService(AppDbContext dbContext)
-    {
-        _dbContext = dbContext;
-    }
-
     public async Task<LyricsGetDto?> GetByIdAsync(int id)
     {
-        var lyrics = await _dbContext.Texts.FindAsync(id);
+        var lyrics = await lyricsRepository.GetByIdAsync(id);
 
         if (lyrics is null) return null;
 
@@ -28,7 +25,7 @@ public class LyricsService : ILyricsService
 
     public async Task<List<LyricsGetDto>> GetAllAsync()
     {
-        var lyrics = await _dbContext.Texts.AsNoTracking().ToListAsync();
+        var lyrics = await lyricsRepository.GetAllAsync();
 
         var lyricsDtos = lyrics.Select(l => new LyricsGetDto
         {
@@ -51,7 +48,7 @@ public class LyricsService : ILyricsService
             Translation = lyricsDto.Translation,
         };
 
-        await _dbContext.Texts.AddAsync(lyrics);
-        await _dbContext.SaveChangesAsync();
+        lyricsRepository.Add(lyrics);
+        await unitOfWork.SaveChangesAsync();
     }
 }

@@ -10,7 +10,6 @@ public static class DependencyInjection
         this IServiceCollection services)
     {
         services.AddSingleton<IPasswordManager, PasswordManager>();
-        services.AddTransient<IAuthService, AuthService>();
         services.AddTransient<IUserService, UserService>();
 
         services.AddTransient<IArtistService, ArtistService>();

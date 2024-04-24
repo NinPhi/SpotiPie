@@ -1,5 +1,4 @@
-﻿using SpotiPie.Domain.Abstractions;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace SpotiPie.Domain.Entities;
 

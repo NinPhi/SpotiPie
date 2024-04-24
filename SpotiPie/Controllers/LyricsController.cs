@@ -2,19 +2,12 @@
 
 [Route("api/lyrics")]
 [ApiController]
-public class LyricsController : ControllerBase
+public class LyricsController(ILyricsService lyricsService) : ControllerBase
 {
-    private readonly ILyricsService _lyricsService;
-
-    public LyricsController(ILyricsService lyricsService)
-    {
-        _lyricsService = lyricsService;
-    }
-
     [HttpGet("{id}")]
     public async Task<ActionResult> GetById(int id)
     {
-        var lyricsDto = await _lyricsService.GetByIdAsync(id);
+        var lyricsDto = await lyricsService.GetByIdAsync(id);
 
         return Ok(lyricsDto);
     }
@@ -22,7 +15,7 @@ public class LyricsController : ControllerBase
     [HttpGet]
     public async Task<ActionResult> GetAll()
     {
-        var lyricsDtos = await _lyricsService.GetAllAsync();
+        var lyricsDtos = await lyricsService.GetAllAsync();
 
         return Ok(lyricsDtos);
     }
@@ -30,7 +23,7 @@ public class LyricsController : ControllerBase
     [HttpPost]
     public async Task<ActionResult> Create(LyricsCreateDto lyricsDto)
     {
-        await _lyricsService.CreateAsync(lyricsDto);
+        await lyricsService.CreateAsync(lyricsDto);
 
         return NoContent();
     }

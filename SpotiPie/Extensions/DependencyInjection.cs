@@ -5,6 +5,7 @@ using Microsoft.OpenApi.Models;
 using System.Text.Json.Serialization;
 using System.Text;
 using SpotiPie.Middleware;
+using SpotiPie.Services;
 
 namespace SpotiPie.Extensions;
 
@@ -84,6 +85,9 @@ public static class DependencyInjection
                 .Build());
 
         services.AddScoped<GlobalExceptionHandling>();
+
+        // Сервисы
+        services.AddTransient<IAuthService, AuthService>();
 
         return services;
     }

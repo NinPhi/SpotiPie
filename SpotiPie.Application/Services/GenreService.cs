@@ -4,7 +4,7 @@ using SpotiPie.Domain.Repositories;
 namespace SpotiPie.Application.Services;
 
 public class GenreService(
-    IGenreRespository genreRespository,
+    IGenreRepository genreRespository,
     IUnitOfWork unitOfWork)
     : IGenreService
 {

@@ -2,19 +2,12 @@
 
 [ApiController]
 [Route("api/albums")]
-public class AlbumsController : ControllerBase
+public class AlbumsController(IAlbumService albumService) : ControllerBase
 {
-    private readonly IAlbumService _albumService;
-
-    public AlbumsController(IAlbumService albumService)
-    {
-        _albumService = albumService;
-    }
-
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById(int id)
     {
-        var albumDto = await _albumService.GetByIdAsync(id);
+        var albumDto = await albumService.GetByIdAsync(id);
 
         return Ok(albumDto);
     }
@@ -22,7 +15,7 @@ public class AlbumsController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Create(AlbumCreateDto albumDto)
     {
-        var albumGetDto = await _albumService.CreateAsync(albumDto);
+        var albumGetDto = await albumService.CreateAsync(albumDto);
 
         return Created($"api/albums/{albumGetDto.Id}", albumGetDto);
     }

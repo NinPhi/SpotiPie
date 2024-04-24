@@ -1,83 +1,61 @@
-﻿namespace SpotiPie.Application.Services;
+﻿using SpotiPie.Application.Services.Interfaces.UnitOfWork;
+using SpotiPie.Domain.Repositories;
 
-public class ArtistService : IArtistService
+namespace SpotiPie.Application.Services;
+
+public class ArtistService(
+    IArtistRepository albumRepository,
+    IUnitOfWork unitOfWork,
+    IMapper mapper) : IArtistService
 {
-    private readonly AppDbContext _dbContext;
-    private readonly IMapper _mapper;
-
-    public ArtistService(AppDbContext dbContext, IMapper mapper)
-    {
-        _dbContext = dbContext;
-        _mapper = mapper;
-    }
-
     public async Task<ArtistGetDto?> GetByIdAsync(int id)
     {
-        var artist = await _dbContext
-            .Artists
-            .AsNoTracking()
-            .FirstOrDefaultAsync(a => a.Id == id);
+        var artist = await albumRepository.GetByIdAsync(id);
 
         if (artist is null) return null;
 
-        var artistDto = _mapper.Map<ArtistGetDto>(artist);
+        var artistDto = mapper.Map<ArtistGetDto>(artist);
 
         return artistDto;
     }
 
     public async Task<List<ArtistGetDto>> GetAllAsync()
     {
-        var artists = await _dbContext
-            .Artists
-            .AsNoTracking()
-            .ToListAsync();
+        var artists = await albumRepository.GetAllAsync();
 
-        //var artistDtos = artists.Select(a => new ArtistGetDto
-        //{
-        //    Id = a.Id,
-        //    Pseudonym = a.Pseudonym,
-        //    MonthlyListeners = a.MonthlyListeners,
-        //    Followers = a.Followers,
-
-        //}).ToList();
-
-        var artistDtos = _mapper.Map<List<ArtistGetDto>>(artists);
+        var artistDtos = mapper.Map<List<ArtistGetDto>>(artists);
 
         return artistDtos;
     }
 
     public async Task CreateAsync(ArtistCreateDto artistDto)
     {
-        var artist = _mapper.Map<Artist>(artistDto);
+        var artist = mapper.Map<Artist>(artistDto);
 
-        await _dbContext.Artists.AddAsync(artist);
+        albumRepository.Add(artist);
 
-        await _dbContext.SaveChangesAsync();
+        await unitOfWork.SaveChangesAsync();
     }
 
     public async Task DeleteAsync(int id)
     {
-        var artist = await _dbContext.Artists.FindAsync(id);
+        var artist = await albumRepository.GetByIdAsync(id);
 
         if (artist is null) return;
 
-        _dbContext.Artists.Remove(artist);
+        albumRepository.Remove(artist);
 
         //EntityEntry artistEntry = _dbContext.Entry(artist);
         //artistEntry.State = EntityState.Deleted;
 
-        await _dbContext.SaveChangesAsync();
+        await unitOfWork.SaveChangesAsync();
     }
 
     public async Task<bool> AddFollowerAsync(int id)
     {
-        var artist = await _dbContext.Artists.FindAsync(id);
+        await albumRepository.AddFollowerAsync(id);
 
-        if (artist is null) return false;
-
-        artist.Followers++;
-
-        await _dbContext.SaveChangesAsync();
+        await unitOfWork.SaveChangesAsync();
 
         return true;
     }

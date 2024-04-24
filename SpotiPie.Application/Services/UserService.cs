@@ -1,27 +1,24 @@
-﻿namespace SpotiPie.Application.Services;
+﻿using SpotiPie.Application.Services.Interfaces.UnitOfWork;
+using SpotiPie.Domain.Repositories;
 
-public class UserService : IUserService
+namespace SpotiPie.Application.Services;
+
+public class UserService(
+    IUserRepository userRepository,
+    IUnitOfWork unitOfWork,
+    IPasswordManager passwordManager) : IUserService
 {
-    private readonly AppDbContext _dbContext;
-    private readonly IPasswordManager _passwordManager;
-
-    public UserService(AppDbContext dbContext, IPasswordManager passwordManager)
-    {
-        _dbContext = dbContext;
-        _passwordManager = passwordManager;
-    }
-
     public async Task<UserGetDto> SignUpAsync(UserCredentialsDto userDto)
     {
         var user = new User()
         {
             Login = userDto.Login!,
-            PasswordHash = _passwordManager.HashPassword(userDto.Password!),
+            PasswordHash = passwordManager.HashPassword(userDto.Password!),
             Role = "User"
         };
 
-        await _dbContext.Users.AddAsync(user);
-        await _dbContext.SaveChangesAsync();
+        userRepository.Add(user);
+        await unitOfWork.SaveChangesAsync();
 
         var userGetDto = new UserGetDto
         {
@@ -35,13 +32,11 @@ public class UserService : IUserService
 
     public async Task<UserGetDto?> GetByLoginAsync(UserCredentialsDto userCredentialsDto)
     {
-        var user = await _dbContext.Users
-            .AsNoTracking()
-            .FirstOrDefaultAsync(u => u.Login == userCredentialsDto.Login);
+        var user = await userRepository.GetByLoginAsync(userCredentialsDto.Login!);
 
         if (user is null) return null;
 
-        if (!_passwordManager.VerifyPassword(userCredentialsDto.Password!, user.PasswordHash))
+        if (!passwordManager.VerifyPassword(userCredentialsDto.Password!, user.PasswordHash))
             return null;
 
         var userDto = user.Adapt<UserGetDto>();

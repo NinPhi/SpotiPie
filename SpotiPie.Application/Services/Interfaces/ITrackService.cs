@@ -1,6 +1,4 @@
-﻿using SpotiPie.Application.Contracts;
-
-namespace SpotiPie.Application.Services.Interfaces;
+﻿namespace SpotiPie.Application.Services.Interfaces;
 
 public interface ITrackService
 {

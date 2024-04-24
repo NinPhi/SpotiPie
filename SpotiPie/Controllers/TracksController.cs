@@ -2,19 +2,12 @@
 
 [Route("api/tracks")]
 [ApiController]
-public class TracksController : ControllerBase
+public class TracksController(ITrackService trackService) : ControllerBase
 {
-    private readonly ITrackService _trackService;
-
-    public TracksController(ITrackService trackService)
-    {
-        _trackService = trackService;
-    }
-
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
-        var trackDtos = await _trackService.GetAllAsync();
+        var trackDtos = await trackService.GetAllAsync();
 
         return Ok(trackDtos);
     }
@@ -22,7 +15,7 @@ public class TracksController : ControllerBase
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById(int id)
     {
-        var trackDto = await _trackService.GetByIdAsync(id);
+        var trackDto = await trackService.GetByIdAsync(id);
 
         if (trackDto is null)
             return NotFound();
@@ -33,7 +26,7 @@ public class TracksController : ControllerBase
     [HttpGet("by-artist/{artistId}")]
     public async Task<IActionResult> GetByArtist(int artistId)
     {
-        var trackDtos = await _trackService.GetByArtistAsync(artistId);
+        var trackDtos = await trackService.GetByArtistAsync(artistId);
 
         return Ok(trackDtos);
     }
@@ -41,7 +34,7 @@ public class TracksController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Create(TrackCreateDto trackDto)
     {
-        var trackGetDto = await _trackService.CreateAsync(trackDto);
+        var trackGetDto = await trackService.CreateAsync(trackDto);
 
         return Created($"api/tracks/{trackGetDto.Id}", trackGetDto);
     }
@@ -49,7 +42,7 @@ public class TracksController : ControllerBase
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(int id, TrackCreateDto dto)
     {
-        var trackGetDto = await _trackService.UpdateAsync(id, dto);
+        var trackGetDto = await trackService.UpdateAsync(id, dto);
 
         if (trackGetDto is null)
             return NotFound();
@@ -60,7 +53,7 @@ public class TracksController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {
-        await _trackService.DeleteAsync(id);
+        await trackService.DeleteAsync(id);
 
         return NoContent();
     }
@@ -68,7 +61,7 @@ public class TracksController : ControllerBase
     [HttpPatch("{id}/genre/{genreId}")]
     public async Task<IActionResult> AddGenre(int id, int genreId)
     {
-        var result = await _trackService.AddGenreAsync(id, genreId);
+        var result = await trackService.AddGenreAsync(id, genreId);
 
         if (result is false)
             return NotFound();
@@ -112,7 +105,7 @@ public class TracksController : ControllerBase
             MimeType = file.ContentType,
         };
 
-        var result = await _trackService.UploadDataAsync(dto);
+        var result = await trackService.UploadDataAsync(dto);
 
         if (result is false)
             return NotFound();
@@ -123,7 +116,7 @@ public class TracksController : ControllerBase
     [HttpGet("{id}/data")]
     public async Task<IActionResult> DownloadFile(int id)
     {
-        var dto = await _trackService.DownloadDataAsync(id);
+        var dto = await trackService.DownloadDataAsync(id);
 
         if (dto is null)
             return NotFound();

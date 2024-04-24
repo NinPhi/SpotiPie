@@ -4,25 +4,18 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace SpotiPie.Application.Services;
+namespace SpotiPie.Services;
 
-public class AuthService : IAuthService
+public class AuthService(IConfiguration configuration) : IAuthService
 {
-    private readonly IConfiguration _configuration;
-
-    public AuthService(IConfiguration configuration)
-    {
-        _configuration = configuration;
-    }
-
     public ClaimsIdentity CreateClaimsIdentity(UserGetDto user)
     {
-        var claims = new Claim[]
-        {
+        Claim[] claims =
+        [
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             new Claim(JwtRegisteredClaimNames.NameId, user.Id.ToString()),
             new Claim("role", user.Role),
-        };
+        ];
 
         var identity = new ClaimsIdentity(claims, JwtBearerDefaults.AuthenticationScheme);
 
@@ -33,7 +26,7 @@ public class AuthService : IAuthService
     {
         var handler = new JwtSecurityTokenHandler();
 
-        var securityKey = Encoding.UTF8.GetBytes(_configuration["JWT:SecurityKey"]!);
+        var securityKey = Encoding.UTF8.GetBytes(configuration["JWT:SecurityKey"]!);
 
         var credentials = new SigningCredentials(
                     new SymmetricSecurityKey(securityKey),

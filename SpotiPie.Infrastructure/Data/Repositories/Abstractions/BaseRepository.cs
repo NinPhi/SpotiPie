@@ -15,7 +15,7 @@ public class BaseRepository<TEntity>(AppDbContext dbContext)
     public Task<TEntity?> GetByIdAsync(int id)
     {
         return dbContext.Set<TEntity>().AsNoTracking()
-            .FirstOrDefaultAsync(g => g.Id == id);
+            .FirstOrDefaultAsync(e => e.Id == id);
     }
 
     public void Add(TEntity genre)

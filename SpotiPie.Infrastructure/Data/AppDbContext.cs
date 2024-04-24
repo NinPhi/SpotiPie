@@ -1,6 +1,6 @@
 ﻿namespace SpotiPie.Infrastructure.Data;
 
-public class AppDbContext : DbContext
+public class AppDbContext(DbContextOptions<AppDbContext> opts) : DbContext(opts)
 {
     public DbSet<Artist> Artists => Set<Artist>();
     public DbSet<Album> Albums => Set<Album>();
@@ -8,8 +8,6 @@ public class AppDbContext : DbContext
     public DbSet<User> Users => Set<User>();
     public DbSet<Lyrics> Texts => Set<Lyrics>();
     public DbSet<Genre> Genres => Set<Genre>();
-
-    public AppDbContext(DbContextOptions<AppDbContext> opts) : base(opts) { }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

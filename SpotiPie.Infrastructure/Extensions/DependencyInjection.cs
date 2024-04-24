@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SpotiPie.Application.Services.Interfaces.UnitOfWork;
-using SpotiPie.Domain.Repositories;
 using SpotiPie.Infrastructure.Data;
 using SpotiPie.Infrastructure.Data.Repositories;
 
@@ -17,7 +16,12 @@ public static class DependencyInjection
 
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 
-        services.AddScoped<IGenreRespository, GenreRepository>();
+        services.AddScoped<IAlbumRepository, AlbumRepository>();
+        services.AddScoped<IArtistRepository, ArtistRepository>();
+        services.AddScoped<IGenreRepository, GenreRepository>();
+        services.AddScoped<ILyricsRepository, LyricsRepository>();
+        services.AddScoped<ITrackRepository, TrackRepository>();
+        services.AddScoped<IUserRepository, UserRepository>();
 
         return services;
     }
