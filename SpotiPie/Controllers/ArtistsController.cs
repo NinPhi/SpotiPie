@@ -1,10 +1,13 @@
-﻿namespace SpotiPie.Controllers;
+﻿using SpotiPie.Middleware;
+
+namespace SpotiPie.Controllers;
 
 [ApiController]
 [Route("api/artists")]
 public class ArtistsController(IArtistService artistService) : ControllerBase
 {
     [HttpGet]
+    [MyAuthorization]
     public async Task<IActionResult> GetAll()
     {
         var artistDtos = await artistService.GetAllAsync();

@@ -11,6 +11,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> opts) : DbContext(opts)
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        base.OnModelCreating(modelBuilder);
     }
 }
 

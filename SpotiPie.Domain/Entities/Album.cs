@@ -4,6 +4,8 @@ namespace SpotiPie.Domain.Entities;
 
 public class Album : Entity
 {
+    public new int Id { get; set; }
+
     public required int ArtistId { get; set; }
 
     [StringLength(200)]
