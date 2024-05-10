@@ -7,7 +7,6 @@ namespace SpotiPie.Controllers;
 public class ArtistsController(IArtistService artistService) : ControllerBase
 {
     [HttpGet]
-    [MyAuthorization]
     public async Task<IActionResult> GetAll()
     {
         var artistDtos = await artistService.GetAllAsync();

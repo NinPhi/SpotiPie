@@ -2,6 +2,8 @@ using SpotiPie.Extensions;
 using SpotiPie.Middleware;
 using SpotiPie.Application.Extensions;
 using SpotiPie.Infrastructure.Extensions;
+using SpotiPie.Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,5 +34,11 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+var dbContext = app.Services.GetRequiredService<AppDbContext>();
+if (dbContext.Database.GetPendingMigrations().Any())
+{
+    dbContext.Database.Migrate();
+}
 
 app.Run();

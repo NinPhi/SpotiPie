@@ -1,0 +1,20 @@
+docker run `
+-e "ACCEPT_EULA=Y" `
+-e "MSSQL_SA_PASSWORD=12qw!@QW" `
+--network spotinet `
+--name mssql `
+--rm `
+mcr.microsoft.com/mssql/server
+
+docker run `
+-e "ConnectionStrings__AppDbContext= `
+Server=mssql; `
+Database=SpotiPieDb; `
+User Id=sa; `
+Password=12qw!@QW; `
+Encrypt=Optional" `
+--network spotinet `
+--name webapi `
+-p 80:8080 `
+--rm `
+ninphi/spotipie
