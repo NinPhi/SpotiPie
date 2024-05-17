@@ -1,0 +1,48 @@
+services:
+  mssql:
+    image: mcr.microsoft.com/mssql/server
+    environment:
+      ACCEPT_EULA: Y
+      MSSQL_SA_PASSWORD: 12qw!@QW
+    networks:
+      - spotinet
+    volumes:
+      - D:\docker-db:/var/opt/mssql/data
+    # healthcheck:
+    #   test:
+    #     - "CMD"
+    #     - "/opt/mssql-tools/bin/sqlcmd"
+    #     - "-S"
+    #     - "http://localhost:1433"
+    #     - "-U"
+    #     - "sa"
+    #     - "-P"
+    #     - "12qw!@QW"
+    #     - "-Q"
+    #     - "SELECT 1"
+    #   interval: 5s
+    #   timeout: 10s
+    #   retries: 5
+    #   start_period: 30s
+    #   start_interval: 5s
+
+  webapi:
+    image: ninphi/spotipie
+    environment:
+      ConnectionStrings__AppDbContext: >
+        Server=mssql;
+        Database=SpotiPieDb;
+        User Id=sa;
+        Password=12qw!@QW;
+        Encrypt=Optional
+    ports:
+      - "8080:8080"
+    networks:
+      - spotinet
+    restart: always
+    # depends_on:
+    #   mssql:
+    #     condition: service_healthy
+
+networks:
+  spotinet:

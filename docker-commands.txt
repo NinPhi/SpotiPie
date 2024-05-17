@@ -2,6 +2,7 @@ docker run --rm `
 -e "ACCEPT_EULA=Y" `
 -e "MSSQL_SA_PASSWORD=12qw!@QW" `
 --network spotinet `
+-v mssql-volume:/var/opt/mssql/data `
 --name mssql `
 mcr.microsoft.com/mssql/server
 
@@ -10,5 +11,4 @@ docker run --rm `
 --network spotinet `
 --name webapi `
 -p 8080:8080 `
--v mssql-volume:/var/opt/mssql/data `
 ninphi/spotipie
