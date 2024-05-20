@@ -1,5 +1,7 @@
 ﻿using SpotiPie.Application.Services.Interfaces.UnitOfWork;
 using SpotiPie.Domain.Repositories;
+using SpotiPie.Domain.Result;
+using SpotiPie.Domain.Result.ErrorMessages;
 
 namespace SpotiPie.Application.Services;
 
@@ -63,11 +65,14 @@ public class TrackService(
         return trackDto;
     }
 
-    public async Task<TrackGetDto?> UpdateAsync(int id, TrackCreateDto trackDto)
+    public async Task<Result<TrackGetDto>> UpdateAsync(int id, TrackCreateDto trackDto)
     {
         var track = await trackRepository.GetByIdAsync(id);
 
-        if (track is null) return null;
+        if (track is null)
+            return new Error(
+                TrackErrors.IdNotFound,
+                $"Attempt to update a track with non-existant ID {id}");
 
         track.Name = trackDto.Name!;
         track.Duration = trackDto.Duration!;
@@ -76,17 +81,9 @@ public class TrackService(
         trackRepository.Update(track);
         await unitOfWork.SaveChangesAsync();
 
-        var trackGetDto = new TrackGetDto
-        {
-            Id = track.Id,
-            ArtistId = track.ArtistId,
-            AlbumId = track.AlbumId,
-            Name = track.Name,
-            TrackDuration = track.Duration,
-            ReleaseDate = track.ReleaseDate,
-        };
+        var getTrackDto = track.Adapt<TrackGetDto>();
 
-        return trackGetDto;
+        return getTrackDto;
     }
 
     public async Task DeleteAsync(int id)

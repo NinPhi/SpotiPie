@@ -1,4 +1,7 @@
-﻿namespace SpotiPie.Controllers;
+﻿using SpotiPie.Domain.Result.ErrorMessages;
+using SpotiPie.Extensions;
+
+namespace SpotiPie.Controllers;
 
 [Route("api/tracks")]
 [ApiController]
@@ -42,12 +45,17 @@ public class TracksController(ITrackService trackService) : ControllerBase
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(int id, TrackCreateDto dto)
     {
-        var trackGetDto = await trackService.UpdateAsync(id, dto);
+        var result = await trackService.UpdateAsync(id, dto);
 
-        if (trackGetDto is null)
-            return NotFound();
+        return result.Match(
+            onSuccess: Ok,
+            onFailure: error =>
+            {
+                if (error.Code == TrackErrors.IdNotFound)
+                    return NotFound();
 
-        return NoContent();
+                return BadRequest(error);
+            });
     }
 
     [HttpDelete("{id}")]
