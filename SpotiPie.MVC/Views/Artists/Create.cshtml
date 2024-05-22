@@ -1,0 +1,13 @@
+﻿@model ArtistCreateDto
+
+<form asp-controller="Artists" asp-action="CreateForm">
+    <div>
+        <label>Pseudonym</label>
+        <input class="form-control ml-2" type="text"
+               placeholder="Alan Walker"
+               asp-for="Pseudonym"
+               required />
+    </div>
+
+    <button class="btn btn-primary mt-2" type="submit">Save</button>
+</form>

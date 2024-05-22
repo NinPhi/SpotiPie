@@ -5,11 +5,13 @@ VisualStudioVersion = 17.9.34622.214
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpotiPie", "SpotiPie\SpotiPie.csproj", "{D4017B6E-8DD9-4449-9E75-86D0740BEBB2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpotiPie.Domain", "SpotiPie.Domain\SpotiPie.Domain.csproj", "{FA5CC7E6-FC0C-4EAD-9954-54A76B3E0117}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpotiPie.Domain", "SpotiPie.Domain\SpotiPie.Domain.csproj", "{FA5CC7E6-FC0C-4EAD-9954-54A76B3E0117}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpotiPie.Application", "SpotiPie.Application\SpotiPie.Application.csproj", "{38834655-111A-4FCA-8874-95C198D16EB4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpotiPie.Application", "SpotiPie.Application\SpotiPie.Application.csproj", "{38834655-111A-4FCA-8874-95C198D16EB4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpotiPie.Infrastructure", "SpotiPie.Infrastructure\SpotiPie.Infrastructure.csproj", "{78CB4CEE-A72D-4BB7-88F0-26DB9661BBA2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpotiPie.Infrastructure", "SpotiPie.Infrastructure\SpotiPie.Infrastructure.csproj", "{78CB4CEE-A72D-4BB7-88F0-26DB9661BBA2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpotiPie.MVC", "SpotiPie.MVC\SpotiPie.MVC.csproj", "{BC4AA52D-D5D0-4F08-8AD0-4ED06BA1C2FF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{78CB4CEE-A72D-4BB7-88F0-26DB9661BBA2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{78CB4CEE-A72D-4BB7-88F0-26DB9661BBA2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{78CB4CEE-A72D-4BB7-88F0-26DB9661BBA2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BC4AA52D-D5D0-4F08-8AD0-4ED06BA1C2FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC4AA52D-D5D0-4F08-8AD0-4ED06BA1C2FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BC4AA52D-D5D0-4F08-8AD0-4ED06BA1C2FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BC4AA52D-D5D0-4F08-8AD0-4ED06BA1C2FF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

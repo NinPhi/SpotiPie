@@ -1,0 +1,24 @@
+﻿@model List<ArtistGetDto>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Pseudonym</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var artist in Model)
+        {
+            <tr>
+                <td>@artist.Id</td>
+                <td>@artist.Pseudonym</td>
+                <td>
+                    <a class="btn btn-primary" asp-action="Edit">Edit</a>
+                    <a class="btn btn-danger" asp-action="DeleteForm" asp-route-id="@artist.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
